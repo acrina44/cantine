@@ -100,9 +100,15 @@ function saveVotesLocal(year, month, votes) {
 // Un seul bin contient tous les mois : { "2025_01": {...}, "2025_02": {...} }
 async function loadAllRemote() {
   try {
-    const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
+     const bust = `?t=${Date.now()}`;
+     const url = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest${bust}`;
+     console.log('[PERF] JSONBin fetch start ->', url);
+     const tA = performance.now();
+     const r = await fetch(url, {
+        headers: { 'X-Master-Key': JSONBIN_KEY }
     });
+     const tB = performance.now();
+     console.log(`[PERF] JSONBin réponse HTTP (status ${r.status}) : ${(tB-tA).toFixed(1)} ms`);
     if (!r.ok) throw new Error('jsonbin read failed');
     const json = await r.json();
     return json.record || {};
