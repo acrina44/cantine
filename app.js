@@ -30,9 +30,21 @@ function startPolling() {
 }
 
 async function loadMonth() {
+  const t0 = performance.now();
+  console.log('[PERF] - Début loadMonth');
+  
   showSkeleton();
+  const t1 = performance.now();
+  console.log(`[PERF] - Début showSkeleton : ${(t1-t0).toFixed(1)} ms`);
+  
   votes = await loadVotes(currentYear, currentMonth);
+  const t2 = performance.now();
+  console.log(`[PERF] - loadVotes (réseau+parse) : ${(t2-t1).toFixed(1)} ms`);
+  
   renderAll();
+  const t3 = performance.now();
+  console.log(`[PERF] - renderAll (DOM) : ${(t3-t2).toFixed(1)} ms`);
+  console.log(`[PERF] - TOTAL loadMonth (DOM) : ${(t3-t0).toFixed(1)} ms`);
 }
 
 function bindEvents() {
