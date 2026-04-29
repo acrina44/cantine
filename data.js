@@ -109,8 +109,12 @@ async function loadAllRemote() {
     });
      const tB = performance.now();
      console.log(`[PERF] JSONBin réponse HTTP (status ${r.status}) : ${(tB-tA).toFixed(1)} ms`);
+     
     if (!r.ok) throw new Error('jsonbin read failed');
     const json = await r.json();
+     const tC = performance.now();
+     console.log(`[PERF] JSONBin JSON.parse : ${(tC-tB).toFixed(1)} ms`);
+     
     return json.record || {};
   } catch(e) {
     console.warn('JSONBin load failed, falling back to localStorage', e);
