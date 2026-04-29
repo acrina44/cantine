@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cantine — Planning du mois</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════ -->
+
+  <header class="app-header">
+    <div class="header-left">
+      <div class="app-icon">🍽️</div>
+      <div>
+        <h1 class="app-title">Cantine</h1>
+        <p class="app-subtitle" id="monthLabel">Chargement…</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="btn-nav" id="prevMonthBtn" title="Mois précédent">‹</button>
+      <button class="btn-nav" id="nextMonthBtn" title="Mois suivant">›</button>
+      <button class="btn-add" id="addPersonBtn">+ Ajouter</button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════
+       TABLEAU PRINCIPAL
+  ══════════════════════════════════════════════ -->
+
+  <main class="table-wrapper">
+    <div class="table-scroll-container" id="tableContainer">
+      <table class="survey-table" id="surveyTable">
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot id="tableFoot"></tfoot>
+      </table>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════
+       POP-UP VOTE
+  ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="voteModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <p class="modal-label">Vote de</p>
+                <h2 class="modal-person" id="modalPersonName">—</h2>
+            </div>
+            <button class="modal-close" id="closeModal">✕</button>
+        </div>
+        <div class="modal-month-label" id="modalMonthLabel"></div>
+        <div class="modal-grid-wrapper">
+            <div class="modal-grid" id="modalGrid"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-validate" id="validateVoteBtn">✓ Enregistrer mon planning</button>
+        </div>
+    </div>
+</div>
+
+  <!-- ══════════════════════════════════════════════
+       POP-UP AJOUTER PERSONNE
+  ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="addModal">
+<div id="addModal" class="modal-card modal-card--small">
+  <div class="modal-header">
+    <h2 class="modal-person">Nouveau participant</h2>
+    <button class="modal-close" id="closeAddModal">✕</button>
+  </div>
+  <div style="padding: 24px;">
+    <label class="field-label">Prénom Nom</label>
+    <input type="text" class="field-input" id="newPersonInput" placeholder="ex. Marie Dupont" autocomplete="off" />
+    <p class="field-hint">La personne apparaîtra dans la liste de tous les mois.</p>
+    <button class="btn-validate" id="confirmAddPerson" style="margin-top:16px">Ajouter</button>
+  </div>
+</div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TOAST
+  ══════════════════════════════════════════════ -->
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js?v=4"></script>
+
+</body>
+</html>
