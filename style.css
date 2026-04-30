@@ -288,6 +288,9 @@ td.cell-vote {
   position: relative;
 }
 td.cell-vote:first-of-type { border-left: none; }
+td:nth-child(3n+1).cell-vote {
+   border-right: 1px solid var(--ios-separator);
+}
 
 td.cell-vote.col-past {
   opacity: 0.35;
