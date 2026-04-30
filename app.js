@@ -38,8 +38,8 @@ renderAll();
 
 function bindEvents() {
 document.getElementById('prevMonthBtn').addEventListener('click', async () => {
-currentMonth-1;
-if (currentMonth < 0) { currentMonth = 11; currentYear-1; }
+currentMonth = currentMonth - 1;
+if (currentMonth < 0) { currentMonth = 11; currentYear = currentYear - 1; }
 await loadMonth();
 });
 document.getElementById('nextMonthBtn').addEventListener('click', async () => {
