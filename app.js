@@ -227,7 +227,6 @@ weekRow.appendChild(wLabel);
 const daysContainer = document.createElement('div');
 daysContainer.className = 'week-days';
 
-```
 weekDays.forEach(day => {
   const iso  = dateISO(currentYear, currentMonth, day);
   const dow  = new Date(currentYear, currentMonth, day).getDay();
@@ -296,7 +295,6 @@ weekDays.forEach(day => {
 
 weekRow.appendChild(daysContainer);
 grid.appendChild(weekRow);
-```
 
 });
 }
