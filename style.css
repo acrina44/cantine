@@ -109,7 +109,6 @@ body {
 }
 
 .table-scroll-container {
-  flex: 1;
   overflow: auto;
   border-radius: var(--radius);
   background: var(--ios-surface);
