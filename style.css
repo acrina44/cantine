@@ -108,7 +108,7 @@ body {
 }
 
 .table-scroll-container {
-  overflow-x: auto;
+  overflow: auto;
    max-height: calc(100dvh - var(--header-h - 32px));
   border-radius: var(--radius);
   background: var(--ios-surface);
@@ -124,24 +124,6 @@ body {
   border-spacing: 0;
   min-width: max-content;
   width: 100%;
-}
-
-tbody {
-   display: block;
-   overflow-y: auto;
-   max-height: calc(100dvh - var(--header-h) - 32px - 88px - 88px);
-}
-
-thead, tfoot {
-   display: table;
-   width: 100%;
-   table-layout: fixed;
-}
-
-tfoot {
-   position: sticky;
-   bottom: 0;
-   z-index: 48;
 }
 
 /* ─── HEADER ROW 1 : Month days ─── */
