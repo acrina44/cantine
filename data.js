@@ -96,7 +96,8 @@ localStorage.setItem(voteKey(year, month), JSON.stringify(votes));
 
 async function loadVotesRemote(year, month) {
 try {
-const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}.json`;
+const bust = `?t=${Date.now()}`;
+const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}.json${bust}`;
 const r   = await fetch(url);
 if (!r.ok) throw new Error('Firebase read failed: ' + r.status);
 const data = await r.json();
@@ -109,8 +110,7 @@ return {};
 
 async function saveVotesRemote(year, month, votes) {
 try {
-const bust = `?t=${Date.now()}`;
-const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}.json${bust}`;
+const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}.json`;
 await fetch(url, {
 method: 'PUT',
 headers: { 'Content-Type': 'application/json' },
