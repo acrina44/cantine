@@ -45,23 +45,63 @@ const voteKey    = (y, m) => `cantine_votes_${y}_${String(m+1).padStart(2,'0')}`
 
 /* ══════════════════════════════════════════════
 API PEOPLE
+La liste est stockée dans Firebase si disponible,
+fusionnée avec DEFAULT_PEOPLE au chargement.
 ══════════════════════════════════════════════ */
+
+// Chargement asynchrone depuis Firebase (ou localStorage en fallback)
+async function fetchPeople() {
+if (FIREBASE_URL) {
+try {
+const bust = `?t=${Date.now()}`;
+const r    = await fetch(`${FIREBASE_URL}/people.json${bust}`);
+const data = await r.json();
+// data est un tableau Firebase ou null
+const remote = Array.isArray(data) ? data : [];
+// Fusionner DEFAULT_PEOPLE + remote (sans doublons)
+const merged = […new Set([…DEFAULT_PEOPLE, …remote])];
+return merged;
+} catch(e) {
+console.warn('Firebase people load failed', e);
+}
+}
+const stored = localStorage.getItem(KEY_PEOPLE);
+if (stored) return JSON.parse(stored);
+return […DEFAULT_PEOPLE];
+}
+
+// Synchrone (localStorage uniquement) — utilisé en fallback immédiat
 function getPeople() {
 const stored = localStorage.getItem(KEY_PEOPLE);
 if (stored) return JSON.parse(stored);
-savePeople(DEFAULT_PEOPLE);
-return [...DEFAULT_PEOPLE];
+return […DEFAULT_PEOPLE];
 }
 
-function savePeople(list) {
+function savePeopleLocal(list) {
 localStorage.setItem(KEY_PEOPLE, JSON.stringify(list));
 }
 
-function addPerson(name) {
-const list = getPeople();
+async function savePeopleRemote(list) {
+if (FIREBASE_URL) {
+try {
+await fetch(`${FIREBASE_URL}/people.json`, {
+method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(list)
+});
+} catch(e) {
+console.warn('Firebase people save failed', e);
+}
+}
+}
+
+async function addPerson(name) {
+// Relit depuis Firebase pour éviter d'écraser un ajout concurrent
+const list = await fetchPeople();
 if (list.includes(name)) return false;
 list.push(name);
-savePeople(list);
+savePeopleLocal(list);
+await savePeopleRemote(list);
 return true;
 }
 
