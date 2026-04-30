@@ -26,6 +26,12 @@ renderAll();
 }
 
 function bindEvents() {
+ const container = document.getElementById('tableContainer');
+ const clone = document.getElementById('tableHeaderClone');
+ container.addEventListener('scroll', () => {
+  clone.scrollLeft = container.scrollLeft;
+  clone.classList.toggle('visible', container.scrollTop > 0);
+ });
 document.getElementById('prevMonthBtn').addEventListener('click', async () => {
 currentMonth = currentMonth - 1;
 if (currentMonth < 0) { currentMonth = 11; currentYear = currentYear - 1; }
@@ -69,36 +75,38 @@ renderFoot(workDays);
 }
 
 function renderHead(workDays, todayISO) {
-const thead = document.getElementById('tableHead');
-thead.innerHTML = '';
-const r1 = document.createElement('tr');
-const th0 = document.createElement('th');
-th0.className = 'col-name th-name';
-th0.rowSpan = 2;
-th0.textContent = 'Participants';
-r1.appendChild(th0);
-workDays.forEach(day => {
-const iso = dateISO(currentYear, currentMonth, day);
-const dow = new Date(currentYear, currentMonth, day).getDay();
-const th  = document.createElement('th');
-th.className = 'th-day-group';
-th.colSpan = 3;
-if (iso === todayISO) th.classList.add('is-today');
-th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
-r1.appendChild(th);
-});
-thead.appendChild(r1);
-const r2 = document.createElement('tr');
-workDays.forEach(() => {
-[['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
-const th = document.createElement('th');
-th.className = `th-sub ${cls}`;
-th.title = label;
-th.textContent = icon;
-r2.appendChild(th);
-});
-});
-thead.appendChild(r2);
+  [document.getElementById('tableHead'),
+   document.getElementById('tableHeadClone')].forEach(thead => {
+    thead.innerHTML = '';
+    const r1 = document.createElement('tr');
+    const th0 = document.createElement('th');
+    th0.className = 'col-name th-name';
+    th0.rowSpan = 2;
+    th0.textContent = 'Participants';
+    r1.appendChild(th0);
+    workDays.forEach(day => {
+      const iso = dateISO(currentYear, currentMonth, day);
+      const dow = new Date(currentYear, currentMonth, day).getDay();
+      const th  = document.createElement('th');
+      th.className = 'th-day-group';
+      th.colSpan = 3;
+      if (iso === todayISO) th.classList.add('is-today');
+      th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
+      r1.appendChild(th);
+    });
+    thead.appendChild(r1);
+    const r2 = document.createElement('tr');
+    workDays.forEach(() => {
+      [['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
+        const th = document.createElement('th');
+        th.className = `th-sub ${cls}`;
+        th.title = label;
+        th.textContent = icon;
+        r2.appendChild(th);
+      });
+    });
+    thead.appendChild(r2);
+  });
 }
 
 function renderBody(workDays, todayISO) {
