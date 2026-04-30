@@ -13,22 +13,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 const today  = new Date();
 currentYear  = today.getFullYear();
 currentMonth = today.getMonth();
-people = getPeople();
+people = await fetchPeople();
+savePeopleLocal(people); // cache local
 await loadMonth();
 bindEvents();
-startPolling();
 });
-
-/* ══════════════════════════════════════════════
-POLLING — rafraîchit le tableau toutes les 30s
-══════════════════════════════════════════════ */
-function startPolling() {
-setInterval(async () => {
-if (document.getElementById('voteModal').classList.contains('is-open')) return;
-votes = await loadVotes(currentYear, currentMonth);
-renderAll();
-}, 30000);
-}
 
 async function loadMonth() {
 showSkeleton();
@@ -101,7 +90,7 @@ r1.appendChild(th);
 thead.appendChild(r1);
 const r2 = document.createElement('tr');
 workDays.forEach(() => {
-[['🥦','sub-veg','Vég.'], ['🕐','sub-1145','11h45'], ['🕛','sub-1230','12h30']].forEach(([icon, cls, label]) => {
+[['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
 const th = document.createElement('th');
 th.className = `th-sub ${cls}`;
 th.title = label;
@@ -130,15 +119,15 @@ const dayVote = personVotes[iso] || {};
 const past    = isPast(iso, todayISO);
 const tdVeg = document.createElement('td');
 tdVeg.className = 'cell-vote' + (past ? ' col-past' : '');
-if (dayVote.veg) { const d = document.createElement('div'); d.className='dot dot-veg'; d.textContent='🥦'; tdVeg.appendChild(d); }
+if (dayVote.veg) { const d = document.createElement('div'); d.className='dot dot-veg'; d.textContent='🌱'; tdVeg.appendChild(d); }
 tr.appendChild(tdVeg);
 const td1145 = document.createElement('td');
 td1145.className = 'cell-vote' + (past ? ' col-past' : '');
-if (dayVote.time === '11:45') { const d = document.createElement('div'); d.className='dot dot-1145'; d.textContent='🕐'; td1145.appendChild(d); }
+if (dayVote.time === '11:45') { const d = document.createElement('div'); d.className='dot dot-1145'; d.textContent='🕚'; td1145.appendChild(d); }
 tr.appendChild(td1145);
 const td1230 = document.createElement('td');
 td1230.className = 'cell-vote' + (past ? ' col-past' : '');
-if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕛'; td1230.appendChild(d); }
+if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕧'; td1230.appendChild(d); }
 tr.appendChild(td1230);
 });
 tbody.appendChild(tr);
@@ -153,9 +142,9 @@ function renderFoot(workDays) {
 const tfoot = document.getElementById('tableFoot');
 tfoot.innerHTML = '';
 const rows = [
-{ label: '🥦 Vég.',  key: 'veg',   cls: 'total-veg'  },
-{ label: '🕐 11h45', key: '11:45', cls: 'total-1145' },
-{ label: '🕛 12h30', key: '12:30', cls: 'total-1230' },
+{ label: '🌱 Vég.',  key: 'veg',   cls: 'total-veg'  },
+{ label: '🕚 11h45', key: '11:45', cls: 'total-1145' },
+{ label: '🕧 12h30', key: '12:30', cls: 'total-1230' },
 { label: '∑ Total',  key: null,    cls: 'total-day'  },
 ];
 rows.forEach(({ label, key, cls }) => {
@@ -250,13 +239,13 @@ weekDays.forEach(day => {
     vegLabel.classList.toggle('selected', vegInput.checked);
   });
   vegLabel.appendChild(vegInput);
-  vegLabel.appendChild(document.createTextNode('🥦'));
+  vegLabel.appendChild(document.createTextNode('🌱'));
   card.appendChild(vegLabel);
 
   // ── Boutons horaire : on gère TOUT via click sur le label ──
   // On n'utilise PAS les events natifs radio (change) pour éviter
   // le conflit label→input double-déclenchement.
-  [['11:45', '🕐', 'opt-1145'], ['12:30', '🕛', 'opt-1230']].forEach(([val, icon, cls]) => {
+  [['11:45', '🕚', 'opt-1145'], ['12:30', '🕧', 'opt-1230']].forEach(([val, icon, cls]) => {
     const timeLabel = document.createElement('label');
     timeLabel.className = `vote-option ${cls}` + (dayVote.time === val ? ' selected' : '');
     timeLabel.title = val;
@@ -332,11 +321,13 @@ function closeAddModal() {
 document.getElementById('addModal').classList.remove('is-open');
 document.body.style.overflow = '';
 }
-function confirmAddPerson() {
+async function confirmAddPerson() {
 const name = document.getElementById('newPersonInput').value.trim();
 if (!name) { showToast('⚠️ Veuillez saisir un nom'); return; }
-if (!addPerson(name)) { showToast(`⚠️ "${name}" existe déjà`); return; }
-people = getPeople();
+const ok = await addPerson(name);
+if (!ok) { showToast(`⚠️ "${name}" existe déjà`); return; }
+people = await fetchPeople();
+savePeopleLocal(people);
 closeAddModal();
 renderAll();
 showToast(`✓ ${name} ajouté(e)`);
