@@ -26,16 +26,7 @@ Modifiez cette liste selon votre équipe.
 Elle sera stockée dans localStorage et
 enrichie par l'ajout de nouveaux noms.
 ══════════════════════════════════════════════ */
-const DEFAULT_PEOPLE = [
-'Alice Martin',
-'Bob Dupont',
-'Claire Bernard',
-'David Lefèvre',
-'Emma Rousseau',
-'François Petit',
-'Géraldine Simon',
-'Hugo Laurent',
-];
+const DEFAULT_PEOPLE = [];
 
 /* ══════════════════════════════════════════════
 CLÉS LOCALSTORAGE
