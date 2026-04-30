@@ -48,7 +48,7 @@ const bust = `?t=${Date.now()}`;
 const r    = await fetch(`${FIREBASE_URL}/people.json${bust}`);
 const data = await r.json();
 // data est un tableau Firebase ou null
-const remote = Array.isArray(data) ? data : Object.value(data || {});
+const remote = Array.isArray(data) ? data : Object.values(data || {});
 // Fusionner DEFAULT_PEOPLE + remote (sans doublons)
 const merged = [...new Set([...DEFAULT_PEOPLE, ...remote])];
 return merged.sort((a, b) => a.localeCompare(b, 'fr'));
