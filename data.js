@@ -59,7 +59,7 @@ const data = await r.json();
 // data est un tableau Firebase ou null
 const remote = Array.isArray(data) ? data : [];
 // Fusionner DEFAULT_PEOPLE + remote (sans doublons)
-const merged = […new Set([…DEFAULT_PEOPLE, …remote])];
+const merged = [...new Set([...DEFAULT_PEOPLE, ...remote])];
 return merged;
 } catch(e) {
 console.warn('Firebase people load failed', e);
@@ -67,14 +67,14 @@ console.warn('Firebase people load failed', e);
 }
 const stored = localStorage.getItem(KEY_PEOPLE);
 if (stored) return JSON.parse(stored);
-return […DEFAULT_PEOPLE];
+return [...DEFAULT_PEOPLE];
 }
 
 // Synchrone (localStorage uniquement) — utilisé en fallback immédiat
 function getPeople() {
 const stored = localStorage.getItem(KEY_PEOPLE);
 if (stored) return JSON.parse(stored);
-return […DEFAULT_PEOPLE];
+return [...DEFAULT_PEOPLE];
 }
 
 function savePeopleLocal(list) {
