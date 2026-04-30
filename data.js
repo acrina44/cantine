@@ -48,17 +48,17 @@ const bust = `?t=${Date.now()}`;
 const r    = await fetch(`${FIREBASE_URL}/people.json${bust}`);
 const data = await r.json();
 // data est un tableau Firebase ou null
-const remote = Array.isArray(data) ? data : [];
+const remote = Array.isArray(data) ? data : Object.value(data || {});
 // Fusionner DEFAULT_PEOPLE + remote (sans doublons)
 const merged = [...new Set([...DEFAULT_PEOPLE, ...remote])];
-return merged;
+return merged.sort((a, b) => a.localeCompare(b, 'fr'));
 } catch(e) {
 console.warn('Firebase people load failed', e);
 }
 }
 const stored = localStorage.getItem(KEY_PEOPLE);
 if (stored) return JSON.parse(stored);
-return [...DEFAULT_PEOPLE];
+return [...DEFAULT_PEOPLE].sort((a, b) => a.localeCompare(b, 'fr'));
 }
 
 // Synchrone (localStorage uniquement) — utilisé en fallback immédiat
