@@ -105,15 +105,32 @@ body {
 .table-wrapper {
   flex: 1;
   padding: 16px;
+   display: flex;
+   flex-direction: column;
+   min-height: 0;
+}
+
+.table-header-fixed {
+   overflow-x: hidden;
+   border-radius: var(--radius) var(--radius) 0 0;
+   background: var(--ios-surface);
+   box-shadow: 0 -1px 0 var(--ios-border);
+   flex-shrink: 0;
+}
+
+.table-header-fixed table {
+   border-collapse: separate;
+   border-spacing: 0;
+   min-width: max-content;
+   width: 100%;
 }
 
 .table-scroll-container {
   overflow: auto;
-   max-height: calc(100dvh - var(--header-h - 32px));
+   flex: 1;
   border-radius: var(--radius);
   background: var(--ios-surface);
   box-shadow: var(--ios-shadow);
-  position: relative;
 }
 
 /* ══════════════════════════════════════════════
