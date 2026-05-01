@@ -111,7 +111,6 @@ body {
 }
 
 .table-header-fixed {
-   overflow-x: hidden;
    border-radius: var(--radius) var(--radius) 0 0;
    background: var(--ios-surface);
    box-shadow: 0 -1px 0 var(--ios-border);
