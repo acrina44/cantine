@@ -157,27 +157,6 @@ thead tr:first-child th.col-name { z-index: 51; }
 thead tr:last-child th.col-name  { z-index: 50; }
 tfoot td.col-name                { z-index: 48; position: sticky; left: 0; }
 
-/* Clone du tableau header */
-.table-header-clone {
-   display: none;
-   position: sticky;
-   top: 0;
-   z-index: 60;
-   background: var(--ios-surface);
-   border-radius: var(--radius) var(--radius) 0 0;
-   overflow: hidden;
-   border-bottom: 2px solid var(--ios-border);
-}
-.table-header-clone table {
-   border-collapse: separate;
-   border-spacing: 0;
-   min-width: max-content;
-   width: 100%;
-}
-.table-header-clone.visible {
-   display: block;
-}
-
 /* Name column sizing */
 th.col-name, td.col-name {
   min-width: var(--col-name-w);
