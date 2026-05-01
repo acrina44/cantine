@@ -27,10 +27,9 @@ renderAll();
 
 function bindEvents() {
  const container = document.getElementById('tableContainer');
- const clone = document.getElementById('tableHeaderClone');
+ const fixedHead = document.getElementById('tableHeaderFixed');
  container.addEventListener('scroll', () => {
-  clone.scrollLeft = container.scrollLeft;
-  clone.classList.toggle('visible', container.scrollTop > 0);
+  fixedHead.scrollLeft = container.scrollLeft;
  });
 document.getElementById('prevMonthBtn').addEventListener('click', async () => {
 currentMonth = currentMonth - 1;
