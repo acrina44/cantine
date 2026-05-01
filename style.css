@@ -113,7 +113,7 @@ body {
 
 .table-header-fixed {
    position: sticky;
-   top: var(--header-h);
+   top: calc(var(--header-h) + 16px);
    z-index: 60;
    overflow: hidden;
    margin: 16px 16px 0 16px;
