@@ -232,6 +232,7 @@ th.col-name.th-name {
   color: var(--ios-gray);
   text-transform: uppercase;
   letter-spacing: 0.6px;
+   border-right: 2px solid var(--ios-border);
 }
 
 /* Sub-option headers */
