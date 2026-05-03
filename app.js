@@ -14,7 +14,7 @@ const today  = new Date();
 currentYear  = today.getFullYear();
 currentMonth = today.getMonth();
 people = await fetchPeople();
-savePeopleLocal(people); // cache local
+savePeopleLocal(people);
 await loadMonth();
 bindEvents();
 });
@@ -26,11 +26,12 @@ renderAll();
 }
 
 function bindEvents() {
- const container = document.getElementById('tableContainer');
- const fixedHead = document.getElementById('tableHeaderFixed');
- container.addEventListener('scroll', () => {
-  fixedHead.scrollLeft = container.scrollLeft;
- });
+const container = document.getElementById('tableContainer');
+const fixedHead = document.getElementById('tableHeaderFixed');
+container.addEventListener('scroll', () => {
+fixedHead.scrollLeft = container.scrollLeft;
+});
+
 document.getElementById('prevMonthBtn').addEventListener('click', async () => {
 currentMonth = currentMonth - 1;
 if (currentMonth < 0) { currentMonth = 11; currentYear = currentYear - 1; }
@@ -57,6 +58,13 @@ document.getElementById('voteModal').addEventListener('click', (e) => {
 if (e.target === e.currentTarget) closeVoteModal();
 });
 document.getElementById('validateVoteBtn').addEventListener('click', savePersonVotes);
+
+// Print modal
+document.getElementById('closePrintModal').addEventListener('click', closePrintModal);
+document.getElementById('printModal').addEventListener('click', (e) => {
+if (e.target === e.currentTarget) closePrintModal();
+});
+document.getElementById('printBtn').addEventListener('click', () => window.print());
 }
 
 /* ══════════════════════════════════════════════
@@ -74,36 +82,52 @@ renderFoot(workDays);
 }
 
 function renderHead(workDays, todayISO) {
-  const thead = document.getElementById('tableHead');
-  thead.innerHTML = '';
-  const r1 = document.createElement('tr');
-  const th0 = document.createElement('th');
-  th0.className = 'col-name th-name';
-  th0.rowSpan = 2;
-  th0.textContent = 'Participants';
-  r1.appendChild(th0);
-  workDays.forEach(day => {
-    const iso = dateISO(currentYear, currentMonth, day);
-    const dow = new Date(currentYear, currentMonth, day).getDay();
-    const th  = document.createElement('th');
-    th.className = 'th-day-group';
-    th.colSpan = 3;
-    if (iso === todayISO) th.classList.add('is-today');
-    th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
-    r1.appendChild(th);
-  });
-  thead.appendChild(r1);
-  const r2 = document.createElement('tr');
-  workDays.forEach(() => {
-    [['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
-      const th = document.createElement('th');
-      th.className = `th-sub ${cls}`;
-      th.title = label;
-      th.textContent = icon;
-      r2.appendChild(th);
-    });
-  });
-  thead.appendChild(r2);
+const thead = document.getElementById('tableHead');
+thead.innerHTML = '';
+const r1 = document.createElement('tr');
+const th0 = document.createElement('th');
+th0.className = 'col-name th-name';
+th0.rowSpan = 2;
+th0.textContent = 'Participants';
+r1.appendChild(th0);
+
+workDays.forEach(day => {
+const iso = dateISO(currentYear, currentMonth, day);
+const dow = new Date(currentYear, currentMonth, day).getDay();
+const th  = document.createElement('th');
+th.className = 'th-day-group';
+th.colSpan = 3;
+if (iso === todayISO) th.classList.add('is-today');
+
+
+// Bouton impression
+const printBtn = document.createElement('button');
+printBtn.className = 'btn-print-day';
+printBtn.title = `Imprimer la liste du ${day} ${MONTH_NAMES[currentMonth]}`;
+printBtn.innerHTML = '🖨️';
+printBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  openPrintModal(iso, day, dow);
+});
+
+th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
+th.appendChild(printBtn);
+r1.appendChild(th);
+
+});
+
+thead.appendChild(r1);
+const r2 = document.createElement('tr');
+workDays.forEach(() => {
+[['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
+const th = document.createElement('th');
+th.className = `th-sub ${cls}`;
+th.title = label;
+th.textContent = icon;
+r2.appendChild(th);
+});
+});
+thead.appendChild(r2);
 }
 
 function renderBody(workDays, todayISO) {
@@ -115,7 +139,7 @@ const tdName = document.createElement('td');
 tdName.className = 'col-name';
 const initials = getInitials(person);
 const color    = getAvatarColor(person);
-tdName.innerHTML = ` <button class="person-btn" data-person="${escHtml(person)}" title="Modifier le vote de ${escHtml(person)}"> <span class="person-avatar" style="background:${color}">${initials}</span> <span class="person-name-full">${escHtml(person)}</span> <span class="person-name-initials">${initials}</span> </button>`;
+tdName.innerHTML = `<button class="person-btn" data-person="${escHtml(person)}" title="Modifier le vote de ${escHtml(person)}"><span class="person-avatar" style="background:${color}">${initials}</span><span class="person-name-full">${escHtml(person)}</span><span class="person-name-initials">${initials}</span></button>`;
 tr.appendChild(tdName);
 const personVotes = votes[person] || {};
 workDays.forEach(day => {
@@ -232,7 +256,6 @@ weekDays.forEach(day => {
   card.className = 'day-card' + (past ? ' is-past' : '') + (iso === todayISO ? ' is-today' : '');
   card.innerHTML = `<div class="day-card-num">${day}</div><div class="day-card-name">${DAY_SHORT[dow]}</div>`;
 
-  // ── Checkbox végétarien ──
   const vegLabel = document.createElement('label');
   vegLabel.className = 'vote-option opt-veg' + (dayVote.veg ? ' selected' : '');
   vegLabel.title = 'Végétarien';
@@ -247,9 +270,6 @@ weekDays.forEach(day => {
   vegLabel.appendChild(document.createTextNode('🌱'));
   card.appendChild(vegLabel);
 
-  // ── Boutons horaire : on gère TOUT via click sur le label ──
-  // On n'utilise PAS les events natifs radio (change) pour éviter
-  // le conflit label→input double-déclenchement.
   [['11:45', '🕚', 'opt-1145'], ['12:30', '🕧', 'opt-1230']].forEach(([val, icon, cls]) => {
     const timeLabel = document.createElement('label');
     timeLabel.className = `vote-option ${cls}` + (dayVote.time === val ? ' selected' : '');
@@ -260,18 +280,15 @@ weekDays.forEach(day => {
     timeInput.name  = `time_${iso}`;
     timeInput.value = val;
     timeInput.checked = dayVote.time === val;
-    // Empêcher le comportement natif du label (qui déclencherait change)
     timeInput.style.display = 'none';
 
     timeLabel.addEventListener('click', (e) => {
-      e.preventDefault(); // neutralise le comportement natif label→input
+      e.preventDefault();
       if (dayVote.time === val) {
-        // Déjà sélectionné → on décoche
         dayVote.time = null;
         timeInput.checked = false;
         card.querySelectorAll('.opt-1145, .opt-1230').forEach(l => l.classList.remove('selected'));
       } else {
-        // Sélectionner cet horaire
         dayVote.time = val;
         timeInput.checked = true;
         card.querySelectorAll('.opt-1145, .opt-1230').forEach(l => l.classList.remove('selected'));
@@ -339,6 +356,49 @@ showToast(`✓ ${name} ajouté(e)`);
 }
 
 /* ══════════════════════════════════════════════
+MODAL IMPRESSION
+══════════════════════════════════════════════ */
+function openPrintModal(iso, day, dow) {
+const counts = countDay(iso);
+const dayLabel = `${DAY_SHORT[dow]} ${day} ${MONTH_NAMES[currentMonth]} ${currentYear}`;
+
+// Titre
+document.getElementById('printDayTitle').textContent = dayLabel;
+document.getElementById('printDayTitlePage').textContent = dayLabel;
+
+// Listes
+const list1145 = people.filter(p => (votes[p] || {})[iso]?.time === '11:45');
+const list1230 = people.filter(p => (votes[p] || {})[iso]?.time === '12:30');
+const listVeg  = people.filter(p => (votes[p] || {})[iso]?.veg);
+
+renderPrintList('printList1145', list1145, counts['11:45']);
+renderPrintList('printList1230', list1230, counts['12:30']);
+renderPrintList('printListVeg',  listVeg,  counts.veg);
+
+document.getElementById('printModal').classList.add('is-open');
+document.body.style.overflow = 'hidden';
+}
+
+function renderPrintList(containerId, list, count) {
+const el = document.getElementById(containerId);
+if (!list.length) {
+el.innerHTML = '<li class="print-list-empty">Aucun inscrit</li>';
+// Update badge
+el.closest('.print-section').querySelector('.print-count').textContent = '0';
+return;
+}
+el.closest('.print-section').querySelector('.print-count').textContent = count;
+el.innerHTML = list
+.map((name, i) => `<li><span class="print-num">${i + 1}</span><span class="print-name">${escHtml(name)}</span></li>`)
+.join('');
+}
+
+function closePrintModal() {
+document.getElementById('printModal').classList.remove('is-open');
+document.body.style.overflow = '';
+}
+
+/* ══════════════════════════════════════════════
 HELPERS
 ══════════════════════════════════════════════ */
 function isPast(iso, todayISO) { return iso < todayISO; }
@@ -348,7 +408,7 @@ const counts = { veg: 0, '11:45': 0, '12:30': 0, total: 0 };
 people.forEach(p => {
 const dayVote = (votes[p] || {})[iso];
 if (!dayVote) return;
-if (dayVote.veg)             counts.veg++;
+if (dayVote.veg)              counts.veg++;
 if (dayVote.time === '11:45') { counts['11:45']++; counts.total++; }
 if (dayVote.time === '12:30') { counts['12:30']++; counts.total++; }
 });
