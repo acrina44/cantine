@@ -160,13 +160,15 @@ return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')
 }
 
 function getWorkingDays(year, month) {
-const days = [];
-const total = new Date(year, month+1, 0).getDate();
-for (let d = 1; d <= total; d++) {
-const dow = new Date(year, month, d).getDay();
-if (dow !== 0 && dow !== 6) days.push(d);
-}
-return days;
+  const days = [];
+  const total = new Date(year, month+1, 0).getDate();
+  const holidays = getFrenchHolidays(year);
+  for (let d = 1; d <= total; d++) {
+    const dow = new Date(year, month, d).getDay();
+    const iso = dateISO(year, month, d);
+    if (dow !== 0 && dow !== 6 && !holidays[iso]) days.push(d);
+  }
+  return days;
 }
 
 function getInitials(name) {
