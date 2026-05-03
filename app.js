@@ -249,11 +249,22 @@ weekDays.forEach(day => {
   const iso  = dateISO(currentYear, currentMonth, day);
   const dow  = new Date(currentYear, currentMonth, day).getDay();
   const past = iso < todayISO;
+  const holidays = getFrenchHolidays(currentYear);
+  const holidayName = holidays[iso];
   if (!tempVotes[iso]) tempVotes[iso] = { time: null, veg: false };
   const dayVote = tempVotes[iso];
 
   const card = document.createElement('div');
-  card.className = 'day-card' + (past ? ' is-past' : '') + (iso === todayISO ? ' is-today' : '');
+  card.className = 'day-card'
+    + (past ? ' is-past' : '')
+    + (iso === todayISO ? ' is-today' : '')
+    + (holidayName ? ' is-holiday' : '');
+  if (holidayName) {
+    const badge = document.createElement('div');
+    badge.className = 'day-holiday-label';
+    badge.textContent = holidayName;
+    card.appendChild(badge);
+  }
   card.innerHTML = `<div class="day-card-num">${day}</div><div class="day-card-name">${DAY_SHORT[dow]}</div>`;
 
   const vegLabel = document.createElement('label');
