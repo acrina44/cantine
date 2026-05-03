@@ -186,17 +186,11 @@ function renderFoot(workDays) {
       const iso    = dateISO(currentYear, currentMonth, day);
       const counts = countDay(iso);
       ['veg', '11:45', '12:30'].forEach(col => {
-        let td = '';
+        const td = document.createElement('td');
         if (key === null) {
-          if (col === 'veg') {
-            td = document.createElement('td');
-            td.className   = cls;
-            td.spancol     = 3;
-            td.textContent = (counts.total || '');
-          }
-          tr.classList.add('total-day');
+          td.className   = col === 'veg' ? cls : '';
+          td.textContent = col === 'veg' ? (counts.total || '') : '';
         } else {
-          td = document.createElement('td');
           td.className   = col === key ? cls : '';
           td.textContent = col === key ? (counts[key] || '') : '';
         }
