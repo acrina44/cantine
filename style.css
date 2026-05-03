@@ -650,3 +650,39 @@ tfoot td.col-name {
   border-radius: 4px;
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ══════════════════════════════════════════════
+   IMPRESSION (@media print)
+══════════════════════════════════════════════ */
+@media print {
+  /* Masquer tout sauf le contenu à imprimer */
+  body > *:not(#printModal) { display: none !important; }
+  #printModal {
+    display: block !important;
+    position: static !important;
+    background: none !important;
+    backdrop-filter: none !important;
+  }
+  .modal-card--print {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-height: none !important;
+    animation: none !important;
+  }
+  .modal-header { border-bottom: 2px solid #000 !important; }
+  .btn-print-action,
+  .modal-close { display: none !important; }
+  .print-body { overflow: visible !important; }
+  .print-section { break-inside: avoid; }
+  .print-section-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { margin: 1.5cm; }
+}
+
+/* loading state */
+.skeleton {
+  background: linear-gradient(90deg, var(--ios-gray3) 25%, var(--ios-surface2) 50%, var(--ios-gray3) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
