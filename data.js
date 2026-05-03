@@ -190,3 +190,47 @@ const MONTH_NAMES = [
 ];
 const DAY_SHORT = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 const DAY_NAMES = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+
+/* ══════════════════════════════════════════════
+   JOURS FÉRIÉS FRANÇAIS
+   Calcul algorithmique (Pâques inclus)
+══════════════════════════════════════════════ */
+function getEasterSunday(year) {
+  // Algorithme de Meeus/Jones/Butcher
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31); // 1-based
+  const day   = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(year, month - 1, day);
+}
+
+function getFrenchHolidays(year) {
+  const easter = getEasterSunday(year);
+  const add = (d, n) => { const r = new Date(d); r.setDate(r.getDate() + n); return r; };
+  const iso  = d => dateISO(d.getFullYear(), d.getMonth(), d.getDate());
+
+  const holidays = {
+    [dateISO(year, 0,  1)]: 'Jour de l’An',
+    [iso(add(easter, 1))]:  'Lundi de Pâques',
+    [dateISO(year, 4,  1)]: 'Fête du Travail',
+    [dateISO(year, 4,  8)]: 'Victoire 1945',
+    [iso(add(easter,39))]:  'Ascension',
+    [iso(add(easter,50))]:  'Lundi de Pentecôte',
+    [dateISO(year, 6, 14)]: 'Fête Nationale',
+    [dateISO(year, 7, 15)]: 'Assomption',
+    [dateISO(year,10,  1)]: 'Toussaint',
+    [dateISO(year,10, 11)]: 'Armistice',
+    [dateISO(year,11, 25)]: 'Noël',
+  };
+  return holidays; // { 'YYYY-MM-DD': 'Nom du jour férié' }
+}
