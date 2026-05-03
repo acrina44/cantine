@@ -297,7 +297,7 @@ weekDays.forEach(day => {
     });
 
     timeLabel.appendChild(timeInput);
-    timeLabel.appendChild(document.createTextNode(icon));
+    timeLabel.appendChild(document.createTextNode(val));
     card.appendChild(timeLabel);
   });
 
