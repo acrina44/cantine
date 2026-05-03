@@ -123,7 +123,7 @@ workDays.forEach(() => {
 const th = document.createElement('th');
 th.className = `th-sub ${cls}`;
 th.title = label;
-th.textContent = icon;
+th.textContent = `${icon} ${label}`;
 r2.appendChild(th);
 });
 });
