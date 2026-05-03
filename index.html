@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cantine — Planning du mois</title>
-  <link rel="stylesheet" href="style.css?v=9" />
+  <link rel="stylesheet" href="style.css?v=10" />
 </head>
 <body>
 
@@ -87,13 +87,77 @@
   </div>
 
   <!-- ══════════════════════════════════════════════
+       POP-UP IMPRESSION
+  ══════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="printModal">
+    <div class="modal-card modal-card--print">
+      <div class="modal-header">
+        <div>
+          <p class="modal-label">Liste du repas</p>
+          <h2 class="modal-person" id="printDayTitle">—</h2>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-print-action" id="printBtn" title="Imprimer">🖨️ Imprimer</button>
+          <button class="modal-close" id="closePrintModal">✕</button>
+        </div>
+      </div>
+
+      <!-- Zone imprimée -->
+      <div class="print-body" id="printBody">
+        <div class="print-page-header">
+          <span class="print-page-icon">🍽️</span>
+          <div>
+            <div class="print-page-title">Cantine</div>
+            <div class="print-page-date" id="printDayTitlePage">—</div>
+          </div>
+        </div>
+
+        <div class="print-sections">
+          <!-- 11h45 -->
+          <div class="print-section print-section--1145">
+            <div class="print-section-header">
+              <span class="print-section-icon">🕚</span>
+              <span class="print-section-title">11h45</span>
+              <span class="print-badge print-count">0</span>
+              <span class="print-badge-label">inscrits</span>
+            </div>
+            <ol class="print-list" id="printList1145"></ol>
+          </div>
+
+          <!-- 12h30 -->
+          <div class="print-section print-section--1230">
+            <div class="print-section-header">
+              <span class="print-section-icon">🕧</span>
+              <span class="print-section-title">12h30</span>
+              <span class="print-badge print-count">0</span>
+              <span class="print-badge-label">inscrits</span>
+            </div>
+            <ol class="print-list" id="printList1230"></ol>
+          </div>
+
+          <!-- Végétarien -->
+          <div class="print-section print-section--veg">
+            <div class="print-section-header">
+              <span class="print-section-icon">🌱</span>
+              <span class="print-section-title">Végétarien</span>
+              <span class="print-badge print-count">0</span>
+              <span class="print-badge-label">inscrits</span>
+            </div>
+            <ol class="print-list" id="printListVeg"></ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
        TOAST
   ══════════════════════════════════════════════ -->
 
   <div class="toast" id="toast"></div>
 
   <script src="data.js?v=10"></script>
-  <script src="app.js?v=11"></script>
+  <script src="app.js?v=12"></script>
 
 </body>
 </html>
