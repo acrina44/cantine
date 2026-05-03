@@ -168,37 +168,43 @@ if (btn) openVoteModal(btn.dataset.person);
 }
 
 function renderFoot(workDays) {
-const tfoot = document.getElementById('tableFoot');
-tfoot.innerHTML = '';
-const rows = [
-{ label: '🌱 Vég.',  key: 'veg',   cls: 'total-veg'  },
-{ label: '🕚 11h45', key: '11:45', cls: 'total-1145' },
-{ label: '🕧 12h30', key: '12:30', cls: 'total-1230' },
-{ label: '∑ Total',  key: null,    cls: 'total-day'  },
-];
-rows.forEach(({ label, key, cls }) => {
-const tr = document.createElement('tr');
-const tdL = document.createElement('td');
-tdL.className = 'col-name';
-tdL.textContent = label;
-tr.appendChild(tdL);
-workDays.forEach(day => {
-const iso    = dateISO(currentYear, currentMonth, day);
-const counts = countDay(iso);
-['veg', '11:45', '12:30'].forEach(col => {
-const td = document.createElement('td');
-if (key === null) {
-td.className   = col === 'veg' ? cls : '';
-td.textContent = col === 'veg' ? (counts.total || '') : '';
-} else {
-td.className   = col === key ? cls : '';
-td.textContent = col === key ? (counts[key] || '') : '';
-}
-tr.appendChild(td);
-});
-});
-tfoot.appendChild(tr);
-});
+  const tfoot = document.getElementById('tableFoot');
+  tfoot.innerHTML = '';
+  const rows = [
+    { label: '🌱 Vég.',  key: 'veg',   cls: 'total-veg'  },
+    { label: '🕚 11h45', key: '11:45', cls: 'total-1145' },
+    { label: '🕧 12h30', key: '12:30', cls: 'total-1230' },
+    { label: '∑ Total',  key: null,    cls: 'total-day'  },
+  ];
+  rows.forEach(({ label, key, cls }) => {
+    const tr = document.createElement('tr');
+    const tdL = document.createElement('td');
+    tdL.className = 'col-name';
+    tdL.textContent = label;
+    tr.appendChild(tdL);
+    workDays.forEach(day => {
+      const iso    = dateISO(currentYear, currentMonth, day);
+      const counts = countDay(iso);
+      ['veg', '11:45', '12:30'].forEach(col => {
+        let td = '';
+        if (key === null) {
+          if (col === 'veg') {
+            td = document.createElement('td');
+            td.className   = cls;
+            td.spancol     = 3;
+            td.textContent = (counts.total || '');
+          }
+          tr.classList.add('total-day');
+        } else {
+          td = document.createElement('td');
+          td.className   = col === key ? cls : '';
+          td.textContent = col === key ? (counts[key] || '') : '';
+        }
+        tr.appendChild(td);
+      });
+    });
+    tfoot.appendChild(tr);
+  });
 }
 
 /* ══════════════════════════════════════════════
