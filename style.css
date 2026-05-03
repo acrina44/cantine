@@ -765,6 +765,21 @@ tfoot td.col-name {
 }
 .field-input:focus { border-color: var(--ios-blue); }
 .field-hint { font-size: 12px; color: var(--ios-gray); margin-top: 8px; line-height: 1.4; }
+.day-card.is-holiday {
+  opacity: 0.45;
+  pointer-events: none;
+  background: var(--ios-gray3);
+}
+.day-holiday-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ios-red);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  margin-top: 2px;
+}
 
 /* ══════════════════════════════════════════════
    TOAST
