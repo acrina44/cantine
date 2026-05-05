@@ -72,63 +72,63 @@ document.getElementById('printBtn').addEventListener('click', () => window.print
 RENDER
 ══════════════════════════════════════════════ */
 function renderAll() {
-document.getElementById('monthLabel').textContent =
-`${MONTH_NAMES[currentMonth]} ${currentYear}`;
-const today    = new Date();
-const todayISO = dateISO(today.getFullYear(), today.getMonth(), today.getDate());
-const workDays = getWorkingDays(currentYear, currentMonth);
-renderHead(workDays, todayISO);
-renderBody(workDays, todayISO);
-renderFoot(workDays);
+  document.getElementById('monthLabel').textContent =
+  `${MONTH_NAMES[currentMonth]} ${currentYear}`;
+  const today    = new Date();
+  const todayISO = dateISO(today.getFullYear(), today.getMonth(), today.getDate());
+  const workDays = getWorkingDays(currentYear, currentMonth);
+  renderHead(workDays, todayISO);
+  renderBody(workDays, todayISO);
+  renderFoot(workDays);
+  scrollToToday(workDays, todayISO);
 }
 
 function renderHead(workDays, todayISO) {
-const thead = document.getElementById('tableHead');
-thead.innerHTML = '';
-const r1 = document.createElement('tr');
-const th0 = document.createElement('th');
-th0.className = 'col-name th-name';
-th0.rowSpan = 2;
-th0.textContent = 'Participants';
-r1.appendChild(th0);
-
-workDays.forEach(day => {
-const iso = dateISO(currentYear, currentMonth, day);
-const dow = new Date(currentYear, currentMonth, day).getDay();
-const th  = document.createElement('th');
-th.className = 'th-day-group';
-th.colSpan = 3;
-if (iso === todayISO) th.classList.add('is-today');
-
-
-// Bouton impression
-const printBtn = document.createElement('button');
-printBtn.className = 'btn-print-day';
-printBtn.title = `Imprimer la liste du ${day} ${MONTH_NAMES[currentMonth]}`;
-printBtn.innerHTML = '🖨️';
-printBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  openPrintModal(iso, day, dow);
-});
-
-th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
-th.appendChild(printBtn);
-r1.appendChild(th);
-
-});
-
-thead.appendChild(r1);
-const r2 = document.createElement('tr');
-workDays.forEach(() => {
-[['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
-const th = document.createElement('th');
-th.className = `th-sub ${cls}`;
-th.title = label;
-th.textContent = `${icon} ${label}`;
-r2.appendChild(th);
-});
-});
-thead.appendChild(r2);
+  const thead = document.getElementById('tableHead');
+  thead.innerHTML = '';
+  const r1 = document.createElement('tr');
+  const th0 = document.createElement('th');
+  th0.className = 'col-name th-name';
+  th0.rowSpan = 2;
+  th0.textContent = 'Participants';
+  r1.appendChild(th0);
+  
+  workDays.forEach(day => {
+    const iso = dateISO(currentYear, currentMonth, day);
+    const dow = new Date(currentYear, currentMonth, day).getDay();
+    const th  = document.createElement('th');
+    th.className = 'th-day-group';
+    th.colSpan = 3;
+    if (iso === todayISO) th.classList.add('is-today');
+    
+    
+    // Bouton impression
+    const printBtn = document.createElement('button');
+    printBtn.className = 'btn-print-day';
+    printBtn.title = `Imprimer la liste du ${day} ${MONTH_NAMES[currentMonth]}`;
+    printBtn.innerHTML = '🖨️';
+    printBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openPrintModal(iso, day, dow);
+    });
+    
+    th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
+    th.appendChild(printBtn);
+    r1.appendChild(th);
+  });
+  
+  thead.appendChild(r1);
+  const r2 = document.createElement('tr');
+  workDays.forEach(() => {
+    [['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
+      const th = document.createElement('th');
+      th.className = `th-sub ${cls}`;
+      th.title = label;
+      th.textContent = `${icon} ${label}`;
+      r2.appendChild(th);
+    });
+  });
+  thead.appendChild(r2);
 }
 
 function renderBody(workDays, todayISO) {
@@ -206,6 +206,19 @@ function renderFoot(workDays) {
     });
     tfoot.appendChild(tr);
   });
+}
+
+function scrollToToday(workDays, todayISO) {
+  const isCurrentMonth = currentYear === new Date().getFullYear() && currentMonth === new Date().getMonth();
+  if (!isCurrentMonth) return;
+  const idx = workDays.findIndex(d => dateISO(currentYear, currentMonth, d) === todayISO);
+  if (idx < 0) return;
+  const container = document.getElementById('tableContainer');
+  const colNameW  = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-name-w')) || 140;
+  const colDayW   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-day-w'))  || 86;
+  // Centrer la colonne d'aujourd'hui
+  const x = colNameW + idx * colDayW * 3 - (container.clientWidth - colDayW * 3) / 2;
+  container.scrollLeft = Math.max(0, x);
 }
 
 /* ══════════════════════════════════════════════
