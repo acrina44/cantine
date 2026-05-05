@@ -496,6 +496,7 @@ function removeCookieFavorite() {
 }
 
 function renderStarBtn(person) {
+  const divNameStar = document.getElementById('nameStar');
   const existing = document.getElementById('starBtn');
   if (existing) existing.remove();
   const btn = document.createElement('button');
