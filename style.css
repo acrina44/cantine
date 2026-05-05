@@ -474,6 +474,36 @@ tfoot td.col-name {
 }
 .modal-close:hover { background: var(--ios-red); color: #fff; }
 
+/* ══════════════════════════════════════════════
+   FAVORITE STAR
+══════════════════════════════════════════════ */
+.modal-star {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: var(--ios-gray2);
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.15s, transform 0.15s;
+  margin-right: auto;
+  margin-left: 10px;
+}
+.modal-star:hover  { color: var(--ios-orange); transform: scale(1.15); }
+.modal-star.is-fav { color: var(--ios-orange); }
+
+tbody tr.is-favorite td.col-name {
+  background: var(--ios-orange-light) !important;
+}
+tbody tr.is-favorite {
+  background: var(--ios-orange-light);
+  font-weight: 600;
+}
+tbody tr.is-favorite:hover,
+tbody tr.is-favorite:hover td.col-name {
+  background: rgba(255,149,0,0.22) !important;
+}
+
 /* ──── Bouton imprimer dans la modale ──── */
 .btn-print-action {
   height: 32px;
