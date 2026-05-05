@@ -499,7 +499,7 @@ function renderStarBtn(person) {
   const divNameStar = document.getElementById('nameStar');
   const existing = document.getElementById('starBtn');
   if (existing) existing.remove();
-  const btn = document.createElement('button');
+  const btn = divNameStar.createElement('button');
   btn.id = 'starBtn';
   btn.className = 'modal-star' + (favoritePerson === person ? ' is-fav' : '');
   btn.title = favoritePerson === person ? 'Retirer des favoris' : 'Mettre en favori';
