@@ -150,21 +150,21 @@ function renderBody(workDays, todayISO) {
     tr.appendChild(tdName);
     const personVotes = votes[person] || {};
     workDays.forEach(day => {
-    const iso     = dateISO(currentYear, currentMonth, day);
-    const dayVote = personVotes[iso] || {};
-    const past    = isPast(iso, todayISO);
-    const tdVeg = document.createElement('td');
-    tdVeg.className = 'cell-vote' + (past ? ' col-past' : '');
-    if (dayVote.veg) { const d = document.createElement('div'); d.className='dot dot-veg'; d.textContent='🌱'; tdVeg.appendChild(d); }
-    tr.appendChild(tdVeg);
-    const td1145 = document.createElement('td');
-    td1145.className = 'cell-vote' + (past ? ' col-past' : '');
-    if (dayVote.time === '11:45') { const d = document.createElement('div'); d.className='dot dot-1145'; d.textContent='🕚'; td1145.appendChild(d); }
-    tr.appendChild(td1145);
-    const td1230 = document.createElement('td');
-    td1230.className = 'cell-vote' + (past ? ' col-past' : '');
-    if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕧'; td1230.appendChild(d); }
-    tr.appendChild(td1230);
+      const iso     = dateISO(currentYear, currentMonth, day);
+      const dayVote = personVotes[iso] || {};
+      const past    = isPast(iso, todayISO);
+      const tdVeg = document.createElement('td');
+      tdVeg.className = 'cell-vote' + (past ? ' col-past' : '');
+      if (dayVote.veg) { const d = document.createElement('div'); d.className='dot dot-veg'; d.textContent='🌱'; tdVeg.appendChild(d); }
+      tr.appendChild(tdVeg);
+      const td1145 = document.createElement('td');
+      td1145.className = 'cell-vote' + (past ? ' col-past' : '');
+      if (dayVote.time === '11:45') { const d = document.createElement('div'); d.className='dot dot-1145'; d.textContent='🕚'; td1145.appendChild(d); }
+      tr.appendChild(td1145);
+      const td1230 = document.createElement('td');
+      td1230.className = 'cell-vote' + (past ? ' col-past' : '');
+      if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕧'; td1230.appendChild(d); }
+      tr.appendChild(td1230);
     });
     tbody.appendChild(tr);
   });
@@ -225,22 +225,22 @@ function scrollToToday(workDays, todayISO) {
 MODAL VOTE
 ══════════════════════════════════════════════ */
 function openVoteModal(person) {
-document.getElementById('modalPersonName').textContent = person;
-document.getElementById('modalMonthLabel').textContent =
-`${MONTH_NAMES[currentMonth]} ${currentYear}`;
-const existing = votes[person] || {};
-tempVotes = {};
-Object.entries(existing).forEach(([iso, val]) => {
-if (val && typeof val === 'object') {
-tempVotes[iso] = { time: val.time || null, veg: !!val.veg };
-} else if (typeof val === 'string') {
-tempVotes[iso] = { time: (val === '11:45' || val === '12:30') ? val : null, veg: val === 'veg' };
-}
-});
-buildModalGrid();
-renderStarBtn(person);
-document.getElementById('voteModal').classList.add('is-open');
-document.body.style.overflow = 'hidden';
+  document.getElementById('modalPersonName').textContent = person;
+  document.getElementById('modalMonthLabel').textContent =
+  `${MONTH_NAMES[currentMonth]} ${currentYear}`;
+  const existing = votes[person] || {};
+  tempVotes = {};
+  Object.entries(existing).forEach(([iso, val]) => {
+    if (val && typeof val === 'object') {
+      tempVotes[iso] = { time: val.time || null, veg: !!val.veg };
+    } else if (typeof val === 'string') {
+      tempVotes[iso] = { time: (val === '11:45' || val === '12:30') ? val : null, veg: val === 'veg' };
+    }
+  });
+  buildModalGrid();
+  renderStarBtn(person);
+  document.getElementById('voteModal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeVoteModal() {
