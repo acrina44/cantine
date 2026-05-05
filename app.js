@@ -5,6 +5,7 @@
   */
 
 let currentYear, currentMonth;
+let favoritePerson = getCookieFavorite();
 let votes     = {};
 let people    = [];
 let tempVotes = {};
@@ -131,40 +132,46 @@ thead.appendChild(r2);
 }
 
 function renderBody(workDays, todayISO) {
-const tbody = document.getElementById('tableBody');
-tbody.innerHTML = '';
-people.forEach(person => {
-const tr = document.createElement('tr');
-const tdName = document.createElement('td');
-tdName.className = 'col-name';
-const initials = getInitials(person);
-const color    = getAvatarColor(person);
-tdName.innerHTML = `<button class="person-btn" data-person="${escHtml(person)}" title="Modifier le vote de ${escHtml(person)}"><span class="person-avatar" style="background:${color}">${initials}</span><span class="person-name-full">${escHtml(person)}</span><span class="person-name-initials">${initials}</span></button>`;
-tr.appendChild(tdName);
-const personVotes = votes[person] || {};
-workDays.forEach(day => {
-const iso     = dateISO(currentYear, currentMonth, day);
-const dayVote = personVotes[iso] || {};
-const past    = isPast(iso, todayISO);
-const tdVeg = document.createElement('td');
-tdVeg.className = 'cell-vote' + (past ? ' col-past' : '');
-if (dayVote.veg) { const d = document.createElement('div'); d.className='dot dot-veg'; d.textContent='🌱'; tdVeg.appendChild(d); }
-tr.appendChild(tdVeg);
-const td1145 = document.createElement('td');
-td1145.className = 'cell-vote' + (past ? ' col-past' : '');
-if (dayVote.time === '11:45') { const d = document.createElement('div'); d.className='dot dot-1145'; d.textContent='🕚'; td1145.appendChild(d); }
-tr.appendChild(td1145);
-const td1230 = document.createElement('td');
-td1230.className = 'cell-vote' + (past ? ' col-past' : '');
-if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕧'; td1230.appendChild(d); }
-tr.appendChild(td1230);
-});
-tbody.appendChild(tr);
-});
-tbody.onclick = (e) => {
-const btn = e.target.closest('.person-btn');
-if (btn) openVoteModal(btn.dataset.person);
-};
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  const sortedPeople = [...people].sort((a, b) => {
+    if (a === favoritePerson) return -1;
+    if (b === favoritePerson) return 1;
+    return 0;
+  });
+  sortedPeople.forEach(person => {
+    const tr = document.createElement('tr');
+    if (person === favoritePerson) tr.classList.add('is-favorite');
+    const tdName = document.createElement('td');
+    tdName.className = 'col-name';
+    const initials = getInitials(person);
+    const color    = getAvatarColor(person);
+    tdName.innerHTML = `<button class="person-btn" data-person="${escHtml(person)}" title="Modifier le vote de ${escHtml(person)}"><span class="person-avatar" style="background:${color}">${initials}</span><span class="person-name-full">${escHtml(person)}</span><span class="person-name-initials">${initials}</span></button>`;
+    tr.appendChild(tdName);
+    const personVotes = votes[person] || {};
+    workDays.forEach(day => {
+    const iso     = dateISO(currentYear, currentMonth, day);
+    const dayVote = personVotes[iso] || {};
+    const past    = isPast(iso, todayISO);
+    const tdVeg = document.createElement('td');
+    tdVeg.className = 'cell-vote' + (past ? ' col-past' : '');
+    if (dayVote.veg) { const d = document.createElement('div'); d.className='dot dot-veg'; d.textContent='🌱'; tdVeg.appendChild(d); }
+    tr.appendChild(tdVeg);
+    const td1145 = document.createElement('td');
+    td1145.className = 'cell-vote' + (past ? ' col-past' : '');
+    if (dayVote.time === '11:45') { const d = document.createElement('div'); d.className='dot dot-1145'; d.textContent='🕚'; td1145.appendChild(d); }
+    tr.appendChild(td1145);
+    const td1230 = document.createElement('td');
+    td1230.className = 'cell-vote' + (past ? ' col-past' : '');
+    if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕧'; td1230.appendChild(d); }
+    tr.appendChild(td1230);
+    });
+    tbody.appendChild(tr);
+  });
+  tbody.onclick = (e) => {
+  const btn = e.target.closest('.person-btn');
+  if (btn) openVoteModal(btn.dataset.person);
+  };
 }
 
 function renderFoot(workDays) {
@@ -218,6 +225,7 @@ tempVotes[iso] = { time: (val === '11:45' || val === '12:30') ? val : null, veg:
 }
 });
 buildModalGrid();
+renderStarBtn(person);
 document.getElementById('voteModal').classList.add('is-open');
 document.body.style.overflow = 'hidden';
 }
@@ -451,10 +459,47 @@ document.getElementById('tableFoot').innerHTML = '';
 }
 
 let toastTimer;
-function showToast(msg) {
-const t = document.getElementById('toast');
-t.textContent = msg;
-t.classList.add('show');
-clearTimeout(toastTimer);
-toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function getCookieFavorite() {
+  const m = document.cookie.match(/(?:^|;\s*)cantine_favorite=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+function setCookieFavorite(name) {
+  const expires = new Date();
+  expires.setFullYear(expires.getFullYear() + 1);
+  document.cookie = `cantine_favorite=${encodeURIComponent(name)};expires=${expires.toUTCString()};path=/`;
+}
+
+function removeCookieFavorite() {
+  document.cookie = 'cantine_favorite=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+}
+
+function renderStarBtn(person) {
+  const existing = document.getElementById('starBtn');
+  if (existing) existing.remove();
+  const btn = document.createElement('button');
+  btn.id = 'starBtn';
+  btn.className = 'modal-star' + (favoritePerson === person ? ' is-fav' : '');
+  btn.title = favoritePerson === person ? 'Retirer des favoris' : 'Mettre en favori';
+  btn.textContent = favoritePerson === person ? '★' : '☆';
+  btn.addEventListener('click', () => {
+    if (favoritePerson === person) {
+      removeCookieFavorite();
+      favoritePerson = null;
+    } else {
+      setCookieFavorite(person);
+      favoritePerson = person;
+    }
+    renderStarBtn(person);
+    renderAll();
+  });
+  document.getElementById('modalPersonName').insertAdjacentElement('afterend', btn);
 }
