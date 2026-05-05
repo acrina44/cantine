@@ -448,6 +448,10 @@ tfoot td.col-name {
   border-bottom: 1px solid var(--ios-border);
   flex-shrink: 0;
 }
+.modal-header-name {
+   display: flex;
+   align-items: end;
+}
 .modal-label { font-size: 12px; color: var(--ios-gray); font-weight: 500; margin-bottom: 2px; }
 .modal-person { font-size: 22px; font-weight: 700; color: var(--ios-label); letter-spacing: -0.4px; }
 .modal-month-label {
