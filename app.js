@@ -394,43 +394,42 @@ showToast(`✓ ${name} ajouté(e)`);
 MODAL IMPRESSION
 ══════════════════════════════════════════════ */
 function openPrintModal(iso, day, dow) {
-const counts = countDay(iso);
-const dayLabel = `${DAY_SHORT[dow]} ${day} ${MONTH_NAMES[currentMonth]} ${currentYear}`;
-
-// Titre
-document.getElementById('printDayTitle').textContent = dayLabel;
-document.getElementById('printDayTitlePage').textContent = dayLabel;
-
-// Listes
-const list1145 = people.filter(p => (votes[p] || {})[iso]?.time === '11:45');
-const list1230 = people.filter(p => (votes[p] || {})[iso]?.time === '12:30');
-const listVeg  = people.filter(p => (votes[p] || {})[iso]?.veg);
-
-renderPrintList('printList1145', list1145, counts['11:45']);
-renderPrintList('printList1230', list1230, counts['12:30']);
-renderPrintList('printListVeg',  listVeg,  counts.veg);
-
-document.getElementById('printModal').classList.add('is-open');
-document.body.style.overflow = 'hidden';
+  const counts = countDay(iso);
+  const dayLabel = `${DAY_SHORT[dow]} ${day} ${MONTH_NAMES[currentMonth]} ${currentYear}`;
+  
+  // Titre
+  document.getElementById('printDayTitle').textContent = dayLabel;
+  
+  // Listes
+  const list1145 = people.filter(p => (votes[p] || {})[iso]?.time === '11:45');
+  const list1230 = people.filter(p => (votes[p] || {})[iso]?.time === '12:30');
+  const listVeg  = people.filter(p => (votes[p] || {})[iso]?.veg);
+  
+  renderPrintList('printList1145', list1145, counts['11:45']);
+  renderPrintList('printList1230', list1230, counts['12:30']);
+  renderPrintList('printListVeg',  listVeg,  counts.veg);
+  
+  document.getElementById('printModal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
 }
 
 function renderPrintList(containerId, list, count) {
-const el = document.getElementById(containerId);
-if (!list.length) {
-el.innerHTML = '<li class="print-list-empty">Aucun inscrit</li>';
-// Update badge
-el.closest('.print-section').querySelector('.print-count').textContent = '0';
-return;
-}
-el.closest('.print-section').querySelector('.print-count').textContent = count;
-el.innerHTML = list
-.map((name, i) => `<li><span class="print-num">${i + 1}</span><span class="print-name">${escHtml(name)}</span></li>`)
-.join('');
+  const el = document.getElementById(containerId);
+  if (!list.length) {
+    el.innerHTML = '<li class="print-list-empty">Aucun inscrit</li>';
+    // Update badge
+    el.closest('.print-section').querySelector('.print-count').textContent = '0';
+    return;
+  }
+  el.closest('.print-section').querySelector('.print-count').textContent = count;
+  el.innerHTML = list
+  .map((name, i) => `<li><span class="print-num">${i + 1}</span><span class="print-name">${escHtml(name)}</span></li>`)
+  .join('');
 }
 
 function closePrintModal() {
-document.getElementById('printModal').classList.remove('is-open');
-document.body.style.overflow = '';
+  document.getElementById('printModal').classList.remove('is-open');
+  document.body.style.overflow = '';
 }
 
 /* ══════════════════════════════════════════════
