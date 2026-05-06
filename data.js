@@ -107,9 +107,9 @@ if (FIREBASE_URL) return await loadVotesRemote(year, month);
 return loadVotesLocal(year, month);
 }
 
-async function saveVotes(year, month, votes) {
-if (FIREBASE_URL) return await saveVotesRemote(year, month, votes);
-saveVotesLocal(year, month, votes);
+async function saveVotes(year, month, person, personVotes) {
+if (FIREBASE_URL) return await saveVotesRemote(year, month, person, personVotes);
+saveVotesLocal(year, month, personVotes);
 }
 
 /* ── LOCAL ── */
@@ -139,17 +139,17 @@ return {};
 }
 }
 
-async function saveVotesRemote(year, month, votes) {
-try {
-const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}.json`;
-await fetch(url, {
-method: 'PUT',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(votes)
-});
-} catch(e) {
-console.warn('Firebase save failed', e);
-}
+async function saveVotesRemote(year, month, person, personVotes) {
+  try {
+    const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}/${encodeURIComponent(person)}.json`;
+    await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(personVotes)
+    });
+  } catch(e) {
+    console.warn('Firebase save failed', e);
+  }
 }
 
 /* ══════════════════════════════════════════════
