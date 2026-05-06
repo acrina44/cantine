@@ -212,7 +212,7 @@ function scrollToToday(workDays, todayISO) {
   const isCurrentMonth = currentYear === new Date().getFullYear() && currentMonth === new Date().getMonth();
   if (!isCurrentMonth) return;
   const now = new Date();
-  const targetISO = now.getHours() >= 13 ? dateISO(now.getFullYear(), now.getMonth(), now.getDate() + 1) : todayISO;
+  const targetISO = (now.getHours() > 13 || (now.getHours() === 13 && now.getMinutes() >= 30)) ? dateISO(now.getFullYear(), now.getMonth(), now.getDate() + 1) : todayISO;
   const idx = workDays.findIndex(d => dateISO(currentYear, currentMonth, d) === targetISO);
   if (idx < 0) return;
   const container = document.getElementById('tableContainer');
