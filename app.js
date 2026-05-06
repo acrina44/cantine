@@ -356,7 +356,7 @@ async function savePersonVotes() {
   const btn = document.getElementById('validateVoteBtn');
   btn.textContent = '⏳ Enregistrement…';
   btn.disabled = true;
-  await saveVotes(currentYear, currentMonth, person, votes);
+  await saveVotesRemote(currentYear, currentMonth, person, clean);
   btn.textContent = '✓ Enregistrer mon planning';
   btn.disabled = false;
   closeVoteModal();
