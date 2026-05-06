@@ -345,23 +345,24 @@ grid.appendChild(weekRow);
 }
 
 async function savePersonVotes() {
-const person = document.getElementById('modalPersonName').textContent;
-const clean  = {};
-Object.entries(tempVotes).forEach(([iso, dayVote]) => {
-if (dayVote.veg || dayVote.time) {
-clean[iso] = { time: dayVote.time || null, veg: !!dayVote.veg };
-}
-});
-votes[person] = clean;
-const btn = document.getElementById('validateVoteBtn');
-btn.textContent = '⏳ Enregistrement…';
-btn.disabled = true;
-await saveVotes(currentYear, currentMonth, votes);
-btn.textContent = '✓ Enregistrer mon planning';
-btn.disabled = false;
-closeVoteModal();
-renderAll();
-showToast(`✓ Vote de ${person} enregistré`);
+  const person = document.getElementById('modalPersonName').textContent;
+  const clean  = {};
+  Object.entries(tempVotes).forEach(([iso, dayVote]) => {
+    if (dayVote.veg || dayVote.time) {
+      clean[iso] = { time: dayVote.time || null, veg: !!dayVote.veg };
+    }
+  });
+  votes[person] = clean;
+  const btn = document.getElementById('validateVoteBtn');
+  btn.textContent = '⏳ Enregistrement…';
+  btn.disabled = true;
+  await saveVotes(currentYear, currentMonth, votes);
+  btn.textContent = '✓ Enregistrer mon planning';
+  btn.disabled = false;
+  closeVoteModal();
+  renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast(`✓ Vote de ${person} enregistré`);
 }
 
 /* ══════════════════════════════════════════════
