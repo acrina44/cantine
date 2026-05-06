@@ -217,7 +217,7 @@ function scrollToToday(workDays, todayISO) {
   const colNameW  = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-name-w')) || 140;
   const colDayW   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-day-w'))  || 86;
   // Colonne d'aujourd'hui en première
-  const x = colNameW + idx * colDayW * 3 + colNameW + 16;
+  const x = colNameW + idx * colDayW * 3 + colNameW - 16;
   container.scrollLeft = Math.max(0, x);
 }
 
