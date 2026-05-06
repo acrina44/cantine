@@ -64,8 +64,8 @@ body {
 
 .header-left { display: flex; align-items: center; gap: 12px; }
 .app-icon { font-size: 28px; line-height: 1; }
-.app-title { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; color: var(--ios-label); }
-.app-subtitle { font-size: 13px; color: var(--ios-gray); font-weight: 400; margin-top: 1px; }
+.app-subtitle { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; color: var(--ios-label); }
+.app-title { font-size: 13px; color: var(--ios-gray); font-weight: 400; margin-top: 1px; }
 .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
 .btn-nav {
