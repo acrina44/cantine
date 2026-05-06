@@ -142,7 +142,6 @@ return {};
 async function saveVotesRemote(year, month, person, personVotes) {
   try {
     const url = `${FIREBASE_URL}/votes/${voteKey(year, month)}/${encodeURIComponent(person)}.json`;
-    console.log('URL : ', url);
     await fetch(url, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
