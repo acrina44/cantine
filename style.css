@@ -14,7 +14,7 @@
   --ios-green:       #34C759;
   --ios-green-light: rgba(52,199,89,0.13);
   --ios-orange:      #FF9500;
-  --ios-orange-light:#FFE6CB;
+  --ios-orange-light:#FDF5EC;
   --ios-red:         #FF3B30;
   --ios-gray:        #8E8E93;
   --ios-gray2:       #C7C7CC;
@@ -505,7 +505,7 @@ tbody tr.is-favorite {
 }
 tbody tr.is-favorite:hover,
 tbody tr.is-favorite:hover td.col-name {
-  background: rgba(255,149,0,0.22) !important;
+  background: rgb(251, 222, 181) !important;
 }
 
 /* ──── Bouton imprimer dans la modale ──── */
