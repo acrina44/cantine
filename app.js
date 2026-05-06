@@ -178,10 +178,10 @@ function renderFoot(workDays) {
   const tfoot = document.getElementById('tableFoot');
   tfoot.innerHTML = '';
   const rows = [
-    { label: '🌱 Vég.',  key: 'veg',   cls: 'total-veg'  },
     { label: '🕚 11h45', key: '11:45', cls: 'total-1145' },
     { label: '🕧 12h30', key: '12:30', cls: 'total-1230' },
-    { label: '∑ Total',  key: null,    cls: 'total-day'  },
+    { label: '🌱 Total végé',  key: 'veg',   cls: 'total-veg'  },
+    { label: '∑ Total convives',  key: null,    cls: 'total-day'  },
   ];
   rows.forEach(({ label, key, cls }) => {
     const tr = document.createElement('tr');
