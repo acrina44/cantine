@@ -63,9 +63,14 @@ document.getElementById('validateVoteBtn').addEventListener('click', savePersonV
 // Print modal
 document.getElementById('closePrintModal').addEventListener('click', closePrintModal);
 document.getElementById('printModal').addEventListener('click', (e) => {
-if (e.target === e.currentTarget) closePrintModal();
+  if (e.target === e.currentTarget) closePrintModal();
 });
 document.getElementById('printBtn').addEventListener('click', () => window.print());
+document.getElementById('onlyVege').addEventListener('click', () => {
+  document.getElementById('onlyVege').classList.toggle('active');
+  document.getElementById('list_1145').classList.toggle('hidden');
+  document.getElementById('list_1230').classList.toggle('hidden');
+});
 }
 
 /* ══════════════════════════════════════════════
