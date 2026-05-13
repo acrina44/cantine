@@ -226,6 +226,9 @@ function scrollToToday(workDays, todayISO) {
   const colDayW   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-day-w'))  || 86;
   // Colonne d'aujourd'hui en première
   const x = idx * colDayW * 3;
+  console.log('workDays : ', workDays);
+  console.log('todayISO : ', todayISO);
+  console.log('Largeur : ', x);
   container.scrollLeft = Math.max(0, x);
   fixedHead.scrollLeft = container.scrollLeft;
 }
