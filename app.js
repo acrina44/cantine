@@ -221,11 +221,13 @@ function scrollToToday(workDays, todayISO) {
   const idx = workDays.findIndex(d => dateISO(currentYear, currentMonth, d) === targetISO);
   if (idx < 0) return;
   const container = document.getElementById('tableContainer');
+  const fixedHead = document.getElementById('tableHeaderFixed');
   const colNameW  = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-name-w')) || 140;
   const colDayW   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col-day-w'))  || 86;
   // Colonne d'aujourd'hui en première
   const x = idx * colDayW * 3;
   container.scrollLeft = Math.max(0, x);
+  fixedHead.scrollLeft = container.scrollLeft;
 }
 
 /* ══════════════════════════════════════════════
