@@ -393,7 +393,7 @@ showToast(`✓ ${name} ajouté(e)`);
 /* ══════════════════════════════════════════════
 MODAL IMPRESSION
 ══════════════════════════════════════════════ */
-function openPrintModal(iso, day, dow, printListHours = true) {
+function openPrintModal(iso, day, dow) {
   const counts = countDay(iso);
   const dayLabel = `${DAY_SHORT[dow]} ${day} ${MONTH_NAMES[currentMonth]} ${currentYear}`;
   
@@ -402,10 +402,8 @@ function openPrintModal(iso, day, dow, printListHours = true) {
   
   // Listes
   const list1145 = people.filter(p => (votes[p] || {})[iso]?.time === '11:45');
-  if (printListHours) {
-    const list1230 = people.filter(p => (votes[p] || {})[iso]?.time === '12:30');
-    const listVeg  = people.filter(p => (votes[p] || {})[iso]?.veg);
-  }
+  const list1230 = people.filter(p => (votes[p] || {})[iso]?.time === '12:30');
+  const listVeg  = people.filter(p => (votes[p] || {})[iso]?.veg);
 
   renderPrintList('printListVeg',  listVeg,  counts.veg);
   renderPrintList('printList1145', list1145, counts['11:45']);
