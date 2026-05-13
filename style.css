@@ -533,6 +533,10 @@ tbody tr.is-favorite:hover td.col-name {
   color: var(--ios-blue);
 }
 .btn-print-action:active { transform: scale(0.96); }
+.btn-print-action.active {
+   background: var(--ios-green-light);
+   border-color: var(--ios-green);
+}
 
 /* ──── Corps de la modale impression ──── */
 .print-body {
@@ -574,6 +578,10 @@ tbody tr.is-favorite:hover td.col-name {
   border-radius: var(--radius);
   border: 1.5px solid var(--ios-border);
   overflow: hidden;
+}
+
+.print-section.hidden {
+   display: none;
 }
 
 .print-section-header {
