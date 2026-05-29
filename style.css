@@ -82,10 +82,10 @@ body {
   transition: background 0.15s, transform 0.1s;
   line-height: 1;
 }
-.btn-nav:hover { background: var(--ios-blue-light); }
+.btn-nav:hover, .btn-link:hover { background: var(--ios-blue-light); }
 .btn-nav:active { transform: scale(0.92); }
 
-.btn-add {
+.btn-add, .btn-link {
   height: 36px;
   padding: 0 16px;
   background: var(--ios-blue);
@@ -100,6 +100,12 @@ body {
 }
 .btn-add:hover { opacity: 0.88; }
 .btn-add:active { transform: scale(0.95); }
+
+.btn-link {
+  background: var(--ios-surface);
+  color: var(--ios-blue);
+  border: 1.5px solid var(--ios-border);
+}
 
 /* ══════════════════════════════════════════════
    TABLE WRAPPER
