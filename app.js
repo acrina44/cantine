@@ -83,7 +83,7 @@ function renderAll() {
   const today    = new Date();
   const todayISO = dateISO(today.getFullYear(), today.getMonth(), today.getDate());
   const workDays = getWorkingDays(currentYear, currentMonth);
-  //renderMenuLink(currentYear, currentMonth);
+  renderMenuLink(currentYear, currentMonth);
   renderHead(workDays, todayISO);
   renderBody(workDays, todayISO);
   renderFoot(workDays);
@@ -446,18 +446,21 @@ function closePrintModal() {
 
 /* ══════════════════════════════════════════════
 MENUS
-function renderMenuLink(currentYear, currentMonth) {
+══════════════════════════════════════════════ */
+async function renderMenuLink(currentYear, currentMonth) {
+ const existing = document.getElementById('btnMenu');
+ if (existing) existing.remove();
  menus = await loadMenusRemote(currentYear, currentMonth);
- if (!menus) return;
+ if (!menus?.url) return;
  const lienMenu = menus.url;
  const btn = document.createElement('button');
+ btn.id = 'btnMenu';
  btn.className = 'btn-link';
  btn.title = 'Afficher le menu';
  btn.textContent = 'Afficher le menu';
  btn.onclick = () => window.open(lienMenu, '_blank');
  document.getElementById('headerRight').prepend(btn);
 }
-══════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════
 HELPERS
