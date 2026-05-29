@@ -83,7 +83,7 @@ function renderAll() {
   const today    = new Date();
   const todayISO = dateISO(today.getFullYear(), today.getMonth(), today.getDate());
   const workDays = getWorkingDays(currentYear, currentMonth);
-  //renderMenuLink(currentYear, currentMonth);
+  renderMenuLink(currentYear, currentMonth);
   renderHead(workDays, todayISO);
   renderBody(workDays, todayISO);
   renderFoot(workDays);
@@ -446,6 +446,7 @@ function closePrintModal() {
 
 /* ══════════════════════════════════════════════
 MENUS
+══════════════════════════════════════════════ */
 async function renderMenuLink(currentYear, currentMonth) {
  const existing = document.getElementById('btnMenu');
  if (existing) existing.remove();
@@ -460,7 +461,6 @@ async function renderMenuLink(currentYear, currentMonth) {
  btn.onclick = () => window.open(lienMenu, '_blank');
  document.getElementById('headerRight').prepend(btn);
 }
-══════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════
 HELPERS
