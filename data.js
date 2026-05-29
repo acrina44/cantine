@@ -33,6 +33,7 @@ CLÉS LOCALSTORAGE
 ══════════════════════════════════════════════ */
 const KEY_PEOPLE = 'cantine_people';
 const voteKey    = (y, m) => `cantine_votes_${y}_${String(m+1).padStart(2,'0')}`;
+const menuKey    = (y, m) => `menu_${y}_${String(m+1).padStart(2,'0')}`;
 
 /* ══════════════════════════════════════════════
 API PEOPLE
@@ -149,6 +150,25 @@ async function saveVotesRemote(year, month, person, personVotes) {
     });
   } catch(e) {
     console.warn('Firebase save failed', e);
+  }
+}
+
+/* ══════════════════════════════════════════════
+API MENUS
+Structure :
+menu_[dateISO] = 'url'
+══════════════════════════════════════════════ */
+async function loadMenusRemote(year, month) {
+  try {
+    const bust = `?t=${Date.now()}`;
+    const url = `${FIREBASE_URL}/menus/${menuKey(year, month)}.json${bust}`;
+    const r   = await fetch(url);
+    if (!r.ok) throw new Error('Firebase read failed: ' + r.status);
+    const data = await r.json();
+    return data || {};
+  } catch(e) {
+    console.warn('Firebase load failed', e);
+    return {};
   }
 }
 
