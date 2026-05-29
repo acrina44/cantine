@@ -9,6 +9,7 @@ let favoritePerson = getCookieFavorite();
 let votes     = {};
 let people    = [];
 let tempVotes = {};
+let menus     = {};
 
 document.addEventListener('DOMContentLoaded', async () => {
 const today  = new Date();
@@ -82,6 +83,7 @@ function renderAll() {
   const today    = new Date();
   const todayISO = dateISO(today.getFullYear(), today.getMonth(), today.getDate());
   const workDays = getWorkingDays(currentYear, currentMonth);
+  renderMenuLink(currentYear, currentMonth);
   renderHead(workDays, todayISO);
   renderBody(workDays, todayISO);
   renderFoot(workDays);
@@ -440,6 +442,21 @@ function renderPrintList(containerId, list, count) {
 function closePrintModal() {
   document.getElementById('printModal').classList.remove('is-open');
   document.body.style.overflow = '';
+}
+
+/* ══════════════════════════════════════════════
+MENUS
+══════════════════════════════════════════════ */
+function renderMenuLink(currentYear, currentMonth) {
+ menus = await loadMenusRemote(currentYear, currentMonth);
+ if (!menus) return;
+ const lienMenu = menus.url;
+ const btn = document.createElement('button');
+ btn.className = 'btn-link';
+ btn.title = 'Afficher le menu';
+ btn.textContent = 'Afficher le menu';
+ btn.onclick = () => window.open(lienMenu, '_blank');
+ document.getElementById('headerRight').prepend(btn);
 }
 
 /* ══════════════════════════════════════════════
