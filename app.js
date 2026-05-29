@@ -453,6 +453,7 @@ async function renderMenuLink(currentYear, currentMonth) {
  menus = await loadMenusRemote(currentYear, currentMonth);
  if (!menus?.url) return;
  const lienMenu = menus.url;
+ console.log(`Menus : ${menus} - Lien : ${lienMenu}`);
  const btn = document.createElement('button');
  btn.id = 'btnMenu';
  btn.className = 'btn-link';
