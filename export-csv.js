@@ -199,7 +199,7 @@ async function sendMail(subject, csvContent, filename) {
     from: MAIL_FROM,
     to:   recipients,
     subject,
-    text: `Bonjour,\n\nVeuillez trouver ci-joint le récapitulatif cantine pour ${MONTH_NAMES_FR[MONTH]} ${YEAR}.\n\nCordialement\n\nP.S. Ce message est généré automatiquement. En cours de mois, les statistiques sont provisoires.`,
+    text: `Bonjour,\n\nVeuillez trouver ci-joint le récapitulatif cantine pour ${MONTH_NAMES_FR[MONTH]} ${YEAR}.\n\nCordialement\n\nP.S. Ce message est généré automatiquement.`,
     attachments: [
       { filename, content: base64 },
     ],
