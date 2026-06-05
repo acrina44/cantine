@@ -17,6 +17,7 @@ currentYear  = today.getFullYear();
 currentMonth = today.getMonth();
 people = await fetchPeople();
 savePeopleLocal(people);
+await fetchClosures();
 await loadMonth();
 bindEvents();
 });
