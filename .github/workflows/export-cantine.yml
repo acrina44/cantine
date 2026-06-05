@@ -19,10 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       # Pas de dépendance npm : le script utilise uniquement fetch (natif Node 18+)
       - name: Générer le CSV et envoyer l'e-mail
