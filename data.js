@@ -175,18 +175,33 @@ async function loadMenusRemote(year, month) {
 /* ══════════════════════════════════════════════
 HELPERS DATE
 ══════════════════════════════════════════════ */
+let CLOSURES = [];
+
 function dateISO(year, month, day) {
 return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+}
+
+async function fetchClosures() {
+  if (!FIREBASE_URL) return;
+  try {
+    const r = await fetch(`${FIREBASE_URL}/fermetures.json?t=${Date.now()}`);
+    const data = await r.json();
+    if (Array.isArray(data)) CLOSURES = data;
+    else if (data) CLOSURES = Object.values(data);
+  } catch(e) {
+    console.warn('Firebase closures load failed', e);
+  }
 }
 
 function getWorkingDays(year, month) {
   const days = [];
   const total = new Date(year, month+1, 0).getDate();
-  const holidays = getFrenchHolidays(year);
   for (let d = 1; d <= total; d++) {
     const dow = new Date(year, month, d).getDay();
+    if (dow === 0 || dow === 6) continue;
     const iso = dateISO(year, month, d);
-    if (dow !== 0 && dow !== 6 && !holidays[iso]) days.push(d);
+    if (CLOSURES.some(c => iso >= c.start && iso <= c.end)) continue;
+    days.push(d);
   }
   return days;
 }
