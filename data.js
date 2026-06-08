@@ -271,3 +271,31 @@ function getFrenchHolidays(year) {
   };
   return holidays; // { 'YYYY-MM-DD': 'Nom du jour férié' }
 }
+
+/* ══════════════════════════════════════════════
+NEWS
+Structure Firebase : /news = [ { id, title, content, link?, date } ]
+══════════════════════════════════════════════ */
+async function fetchNews() {
+  if (!FIREBASE_URL) return [];
+  try {
+    const r = await fetch(`${FIREBASE_URL}/news.json?t=${Date.now()}`);
+    const data = await r.json();
+    if (!data) return [];
+    const list = Array.isArray(data) ? data : Object.values(data);
+    return list.filter(Boolean).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  } catch(e) {
+    console.warn('Firebase news load failed', e);
+    return [];
+  }
+}
+
+const NEWS_SEEN_KEY = 'cantine_news_seen';
+
+function getNewsSeenDate() {
+  return localStorage.getItem(NEWS_SEEN_KEY) || '';
+}
+
+function markNewsSeen(latestDate) {
+  localStorage.setItem(NEWS_SEEN_KEY, latestDate);
+}
