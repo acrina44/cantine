@@ -885,7 +885,6 @@ tbody tr.is-favorite:hover td.col-name {
   font-size: 9px;
   font-weight: 700;
   display: flex; align-items: center; justify-content: center;
-  border: 1.5px solid var(--ios-surface);
   pointer-events: none;
 }
 
