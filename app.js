@@ -550,3 +550,55 @@ function renderStarBtn(person) {
   });
   document.getElementById('nameStar').appendChild(btn);
 }
+
+/* ══════════════════════════════════════════════
+ACTUALITÉS
+══════════════════════════════════════════════ */
+async function initNews() {
+  const news = await fetchNews();
+  if (!news.length) return;
+  const latestDate = news[0].date || '';
+  const seenDate   = getNewsSeenDate();
+  if (latestDate > seenDate) {
+    document.getElementById('bellBadge').style.display = 'flex';
+  }
+}
+
+async function openNewsModal() {
+  const news   = await fetchNews();
+  const list   = document.getElementById('newsList');
+  list.innerHTML = '';
+
+  if (!news.length) {
+    list.innerHTML = '<p class="news-empty">Pas d\'actualité pour le moment.</p>';
+  } else {
+    news.forEach(item => {
+      const article = document.createElement('article');
+      article.className = 'news-item';
+      article.innerHTML = `
+        <div class="news-meta">${item.date ? formatNewsDate(item.date) : ''}</div>
+        <div class="news-title">${escHtml(item.title || '')}</div>
+        <div class="news-content">${escHtml(item.content || '')}</div>
+        ${item.link ? `<a class="news-link" href="${escHtml(item.link)}" target="_blank" rel="noopener">🔗 Voir le lien</a>` : ''}
+      `;
+      list.appendChild(article);
+    });
+    // Marquer comme lu
+    const latestDate = news[0].date || '';
+    markNewsSeen(latestDate);
+    document.getElementById('bellBadge').style.display = 'none';
+  }
+
+  document.getElementById('newsModal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNewsModal() {
+  document.getElementById('newsModal').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+function formatNewsDate(iso) {
+  const [y, m, d] = iso.split('-');
+  return `${d} ${MONTH_NAMES[parseInt(m)-1]} ${y}`;
+}
