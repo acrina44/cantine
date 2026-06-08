@@ -20,6 +20,7 @@ savePeopleLocal(people);
 await fetchClosures();
 await loadMonth();
 bindEvents();
+initNews();
 });
 
 async function loadMonth() {
@@ -33,6 +34,11 @@ const container = document.getElementById('tableContainer');
 const fixedHead = document.getElementById('tableHeaderFixed');
 container.addEventListener('scroll', () => {
 fixedHead.scrollLeft = container.scrollLeft;
+ document.getElementById('bellBtn').addEventListener('click', openNewsModal);
+ document.getElementById('closeNewsModal').addEventListener('click', closeNewsModal);
+ document.getElementById('newsModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeNewsModal();
+ });
 });
 
 document.getElementById('prevMonthBtn').addEventListener('click', async () => {
