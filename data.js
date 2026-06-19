@@ -201,7 +201,7 @@ function getWorkingDays(year, month) {
     const dow = new Date(year, month, d).getDay();
     if (dow === 0 || dow === 6) continue;
     const iso = dateISO(year, month, d);
-    if (holidays.has(iso)) continue;
+    if (holidays.includes(iso)) continue;
     if (CLOSURES.some(c => iso >= c.start && iso <= c.end)) continue;
     days.push(d);
   }
