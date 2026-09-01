@@ -58,6 +58,9 @@ document.getElementById('confirmAddPerson').addEventListener('click', confirmAdd
 document.getElementById('addModal').addEventListener('click', (e) => {
 if (e.target === e.currentTarget) closeAddModal();
 });
+document.getElementById('newsModal').addEventListener('click', (e) => {
+if (e.target === e.currentTarget) closeNewsModal();
+});
 document.getElementById('newPersonInput').addEventListener('keydown', (e) => {
 if (e.key === 'Enter') confirmAddPerson();
 });
