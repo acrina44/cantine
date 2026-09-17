@@ -43,23 +43,25 @@ fusionnée avec DEFAULT_PEOPLE au chargement.
 
 // Chargement asynchrone depuis Firebase (ou localStorage en fallback)
 async function fetchPeople() {
-if (FIREBASE_URL) {
-try {
-const bust = `?t=${Date.now()}`;
-const r    = await fetch(`${FIREBASE_URL}/people.json${bust}`);
-const data = await r.json();
-// data est un tableau Firebase ou null
-const remote = Array.isArray(data) ? data : Object.values(data || {});
-// Fusionner DEFAULT_PEOPLE + remote (sans doublons)
-const merged = [...new Set([...DEFAULT_PEOPLE, ...remote])];
-return merged.sort((a, b) => a.localeCompare(b, 'fr'));
-} catch(e) {
-console.warn('Firebase people load failed', e);
-}
-}
-const stored = localStorage.getItem(KEY_PEOPLE);
-if (stored) return JSON.parse(stored);
-return [...DEFAULT_PEOPLE].sort((a, b) => a.localeCompare(b, 'fr'));
+  if (FIREBASE_URL) {
+    try {
+      const bust = `?t=${Date.now()}`;
+      const r    = await fetch(`${FIREBASE_URL}/people.json${bust}`);
+      if (!r.ok) throw new Error('Firebase read failed: ' + r.status);
+      const data = await r.json();
+      // data est une map { "Nom Prénom": true } (ou tableau legacy, ou null)
+      const remote = Array.isArray(data) ? data.filter(Boolean) : Object.keys(data || {});
+      const merged = [...new Set([...DEFAULT_PEOPLE, ...remote])];
+      return merged.sort((a, b) => a.localeCompare(b, 'fr'));
+    } catch(e) {
+      console.warn('Firebase people load failed', e);
+      const stored = localStorage.getItem(KEY_PEOPLE);
+      return stored ? JSON.parse(stored) : [...DEFAULT_PEOPLE].sort((a, b) => a.localeCompare(b, 'fr'));
+    }
+  }
+  const stored = localStorage.getItem(KEY_PEOPLE);
+  if (stored) return JSON.parse(stored);
+  return [...DEFAULT_PEOPLE].sort((a, b) => a.localeCompare(b, 'fr'));
 }
 
 // Synchrone (localStorage uniquement) — utilisé en fallback immédiat
@@ -88,13 +90,25 @@ console.warn('Firebase people save failed', e);
 }
 
 async function addPerson(name) {
-// Relit depuis Firebase pour éviter d'écraser un ajout concurrent
-const list = await fetchPeople();
-if (list.includes(name)) return false;
-list.push(name);
-savePeopleLocal(list);
-await savePeopleRemote(list);
-return true;
+  if (FIREBASE_URL) {
+    try {
+      const key   = encodeURIComponent(name);
+      const check = await fetch(`${FIREBASE_URL}/people/${key}.json`);
+      if (check.ok && (await check.json())) return false; // déjà présent
+      const r = await fetch(`${FIREBASE_URL}/people/${key}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(true)
+      });
+      if (!r.ok) throw new Error('Firebase write failed: ' + r.status);
+    } catch(e) {
+      console.warn('Firebase addPerson failed', e);
+      return false;
+    }
+  }
+  const list = getPeople();
+  if (!list.includes(name)) { list.push(name); savePeopleLocal(list); }
+  return true;
 }
 
 /* ══════════════════════════════════════════════
