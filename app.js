@@ -18,6 +18,7 @@ currentMonth = today.getMonth();
 people = await fetchPeople();
 savePeopleLocal(people);
 await fetchClosures();
+await fetchEvents();
 await loadMonth();
 bindEvents();
 initNews();
@@ -117,6 +118,8 @@ function renderHead(workDays, todayISO) {
     th.className = 'th-day-group';
     th.colSpan = 3;
     if (iso === todayISO) th.classList.add('is-today');
+    const evt = EVENTS[iso];
+    if (evt) { th.classList.add('is-event'); th.title = evt; }
     
     
     // Bouton impression
@@ -129,7 +132,7 @@ function renderHead(workDays, todayISO) {
       openPrintModal(iso, day, dow);
     });
     
-    th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}`;
+    th.innerHTML = `<span class="day-num">${day}</span>${DAY_SHORT[dow]}${evt ? '<span class="evt-emoji">🎄</span>' : ''}`;
     th.appendChild(printBtn);
     r1.appendChild(th);
   });
@@ -140,6 +143,7 @@ function renderHead(workDays, todayISO) {
     [['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
       const th = document.createElement('th');
       th.className = `th-sub ${cls}`;
+      if (EVENTS[dateISO(currentYear, currentMonth, day)]) th.classList.add('is-event');
       th.title = label;
       th.textContent = `${icon} ${label}`;
       r2.appendChild(th);
@@ -182,6 +186,7 @@ function renderBody(workDays, todayISO) {
       td1230.className = 'cell-vote' + (past ? ' col-past' : '');
       if (dayVote.time === '12:30') { const d = document.createElement('div'); d.className='dot dot-1230'; d.textContent='🕧'; td1230.appendChild(d); }
       tr.appendChild(td1230);
+      if (EVENTS[iso]) [tdVeg, td1145, td1230].forEach(td => td.classList.add('is-event'));
     });
     tbody.appendChild(tr);
   });
@@ -218,6 +223,7 @@ function renderFoot(workDays) {
           td.className   = col === key ? cls : '';
           td.textContent = col === key ? (counts[key] || '') : '';
         }
+        if (EVENTS[iso]) td.classList.add('is-event');
         tr.appendChild(td);
       });
     });
@@ -304,13 +310,20 @@ weekDays.forEach(day => {
     + (past ? ' is-past' : '')
     + (iso === todayISO ? ' is-today' : '')
     + (holidayName ? ' is-holiday' : '');
+  card.innerHTML = `<div class="day-card-num">${day}</div><div class="day-card-name">${DAY_SHORT[dow]}</div>`;
   if (holidayName) {
     const badge = document.createElement('div');
     badge.className = 'day-holiday-label';
     badge.textContent = holidayName;
     card.appendChild(badge);
   }
-  card.innerHTML = `<div class="day-card-num">${day}</div><div class="day-card-name">${DAY_SHORT[dow]}</div>`;
+  if (evt) {
+   card.classList.add('is-event');
+   const b = document.createElement('div');
+   b.className = 'day-event-label';
+   b.textContent = `🎄 ${evt}`;
+   card.appendChild(b);
+  }
 
   const vegLabel = document.createElement('label');
   vegLabel.className = 'vote-option opt-veg' + (dayVote.veg ? ' selected' : '');
