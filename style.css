@@ -1026,3 +1026,39 @@ tbody tr.is-favorite:hover td.col-name {
   border-radius: 4px;
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* -- Jour événement (Noël) -- */
+th.is-event, .day-card.is-event { position: relative; overflow: hidden; }
+
+th.th-day-group.is-event, .day-card.is-event {
+   background: linear-gradient(160deg, #1a6b3a, #0f4023);
+   color: #fff;
+   border-color: #c8102e;
+}
+th.th-sub.is-event { background: #c8102e; color: #fff; }
+td.is-event { background: rgba(200, 16, 46, .08); }
+tfoot td.is-event { background: rgba(22, 91, 51, .12); }
+
+.evt-emoji { display: block; font-size: 14px; line-height: 1; }
+
+.day-event-label {
+   font-size: 11px; font-weight: 600; text-align: center;
+   color: #ffd60a; margin-bottom: 4px;
+}
+
+/* Neige */
+th.is-event::after, .day-card.is-event::after {
+   content: ''; position: absolute; inset: 0; pointer-events: none;
+   background-image:
+      radial-gradient(2px 2px at 10px 8px , #fff, transparent),
+      radial-gradient(1.5px 1.5px at 35px 30px , #fff, transparent),
+      radial-gradient(2px 2px at 60px 18px , #fff, transparent),
+      radial-gradient(1.5px 1.5px at 80px 45px , #fff, transparent),
+      radial-gradient(2px 2px at 22px 52px , #fff, transparent);
+   background-size: 100px 60px;
+   animation: snowfall 6s linear infinite;
+}
+@keyframes snowfall { to { background-position: 0 60px; } }
+@media (prefers-reduced-motion: reduce) {
+   th.is-event::after, .day-card.is-event::after { animation: none; }
+}
