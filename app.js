@@ -317,6 +317,7 @@ weekDays.forEach(day => {
     badge.textContent = holidayName;
     card.appendChild(badge);
   }
+ const evt = EVENTS[iso];
   if (evt) {
    card.classList.add('is-event');
    const b = document.createElement('div');
