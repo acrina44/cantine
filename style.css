@@ -1033,8 +1033,9 @@ th.is-event, .day-card.is-event { position: relative; overflow: hidden; }
 th.th-day-group.is-event, .day-card.is-event {
    background: linear-gradient(160deg, #1a6b3a, #0f4023);
    color: #fff;
-   border-color: #c8102e;
+   border-color: #c8102e; border-width: 3px;
 }
+.th-day-group.is-event .day-num, .day-card.is-event .day-card-num, .day-card.is-event .day-card-name { color: #fff; }
 th.th-sub.is-event { background: #c8102e; color: #fff; }
 td.is-event { background: rgba(200, 16, 46, .08); }
 tfoot td.is-event { background: rgba(22, 91, 51, .12); }
