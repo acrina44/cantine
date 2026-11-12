@@ -289,6 +289,22 @@ function getFrenchHolidays(year) {
 }
 
 /* ══════════════════════════════════════════════
+ÉVÉNEMENTS
+Structure Firebase : /evenement = [ { 'YYYY-MM-DD': "Nom de l'événement" } ]
+══════════════════════════════════════════════ */
+let EVENTS = {};
+
+async function fetchEvents() {
+ if (!FIREBASE_URL) return [];
+ try {
+  const r = await fetch(`${FIREBASE_URL}/evenements.json?t=${Date.now()}`);
+  EVENTS = (await r.json()) || {};
+ } catch(e) {
+    console.warn('Firebase news load failed', e);
+  }
+}
+
+/* ══════════════════════════════════════════════
 NEWS
 Structure Firebase : /news = [ { id, title, content, link?, date } ]
 ══════════════════════════════════════════════ */
