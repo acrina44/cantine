@@ -139,7 +139,7 @@ function renderHead(workDays, todayISO) {
   
   thead.appendChild(r1);
   const r2 = document.createElement('tr');
-  workDays.forEach(() => {
+  workDays.forEach(day => {
     [['🌱','sub-veg','Vég.'], ['🕚','sub-1145','11h45'], ['🕧','sub-1230','12h30']].forEach(([icon, cls, label]) => {
       const th = document.createElement('th');
       th.className = `th-sub ${cls}`;
