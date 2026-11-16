@@ -339,7 +339,7 @@ weekDays.forEach(day => {
   vegLabel.appendChild(vegInput);
   if (evt) {
    const SVG_CARROT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M332 152 C328 96, 344 22, 376 22 C402 22, 398 78, 386 116 C414 76, 448 34, 472 48 C496 62, 466 112, 424 142 C460 124, 496 122, 498 150 C500 180, 434 188, 374 176 L342 172 Z" /><g fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M356 156 C308 108, 248 114, 212 168 L54 416 C38 442, 68 472, 94 456 L342 298 C396 262, 402 202, 356 156 Z" /><line x1="215" y1="164" x2="262" y2="211" /><line x1="186" y1="209" x2="217" y2="240" /><line x1="227" y1="371" x2="192" y2="336" /><line x1="184" y1="398" x2="157" y2="371" /></g></svg>`;
-   vegLabel.appendChild(document.innerHTML(SVG_CARROT));
+   vegLabel.innerHTML(SVG_CARROT);
   } else {
    vegLabel.appendChild(document.createTextNode('🌱'));
   }
