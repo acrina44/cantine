@@ -1039,7 +1039,7 @@ th.th-day-group.is-event, .day-card.is-event {
 th.th-sub.is-event { background: #c8102e; color: #fff; }
 td.is-event { background: rgba(200, 16, 46, .08); }
 tfoot td.is-event { background: rgba(22, 91, 51, .12); }
-.day-card.is-event .vote-option { padding: 2px 4px 0 4px; }
+.day-card.is-event .vote-option { padding: 2px 4px 0 4px; color: #1c3c28; }
 .day-card.is-event .vote-option.opt-veg.selected  { background: var(--ios-green);  color: #fff; }
 .day-card.is-event .veg-icon svg { height: 15px; width: 15px; }
 .day-card.is-event .vote-option.opt-1145.selected { background: var(--ios-blue);   color: #fff; }
