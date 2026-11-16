@@ -1039,6 +1039,10 @@ th.th-day-group.is-event, .day-card.is-event {
 th.th-sub.is-event { background: #c8102e; color: #fff; }
 td.is-event { background: rgba(200, 16, 46, .08); }
 tfoot td.is-event { background: rgba(22, 91, 51, .12); }
+.day-card.is-event .vote-option.opt-veg.selected  { background: var(--ios-green);  color: #fff; }
+.day-card.is-event .vote-option.opt-veg.selected svg { height: 12px; }
+.day-card.is-event .vote-option.opt-1145.selected { background: var(--ios-blue);   color: #fff; }
+.day-card.is-event .vote-option.opt-1230.selected { background: var(--ios-purple); color: #fff; }
 
 .evt-emoji { display: block; font-size: 14px; line-height: 1; }
 
